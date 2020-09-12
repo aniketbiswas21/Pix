@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 require("dotenv").config({ path: __dirname + "/.env" });
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const morgan = require("morgan");
 
 // * Config
 const connectDB = require("./config/db");
@@ -18,6 +19,11 @@ app.use(express.json());
 
 // Cookie Parser
 app.use(cookieParser());
+
+//Dev loggin middleware
+if (process.env.NODE_env === "development") {
+  app.use(morgan("dev"));
+}
 
 app.use(
   cors({

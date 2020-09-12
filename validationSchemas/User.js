@@ -9,3 +9,18 @@ exports.registerUser = (body) => {
   });
   return schema.validate(body);
 };
+
+exports.loginUser = (body) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(6).max(100).trim().required(),
+  });
+  return schema.validate(body);
+};
+
+exports.verifyOtp = (body) => {
+  const schema = Joi.object({
+    otp: Joi.string().trim().required(),
+  });
+  return schema.validate(body);
+};

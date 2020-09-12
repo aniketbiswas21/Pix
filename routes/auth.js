@@ -5,7 +5,8 @@ const express = require("express");
 // * Models
 
 // * Controllers
-const { register } = require("../controllers/auth");
+const { register, login } = require("../controllers/auth");
+const { verifyOtp } = require("../validationSchemas/User");
 
 // * Middleware
 
@@ -13,5 +14,7 @@ const { register } = require("../controllers/auth");
 const router = express.Router();
 
 router.post("/register", register);
+router.post("/login", login);
+router.post("/verify-otp", verifyOtp);
 
 module.exports = router;

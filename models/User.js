@@ -59,6 +59,13 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: new Date(),
   },
+  otp: {
+    type: String,
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 });
@@ -78,6 +85,14 @@ UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
+};
+
+// Match user entered otp to otp stored in database
+UserSchema.methods.matchOtp = function (enteredOtp) {
+  if (enteredOtp !== this.otp) {
+    return false;
+  }
+  return true;
 };
 
 // Match user entered password to hashed password in database
