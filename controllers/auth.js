@@ -90,6 +90,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @access   Private
 exports.verifyOtp = asyncHandler(async (req, res, next) => {
   try {
+    //TODO Add timestamp check
     const user = await User.findById(req.user.id);
     const { value, error } = validationSchema.verifyOtp(req.body);
     if (error)
@@ -98,6 +99,12 @@ exports.verifyOtp = asyncHandler(async (req, res, next) => {
         .json({ success: false, message: error.details[0].message });
 
     const { otp } = value;
+
+    if (user.verified === true) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Already Verified" });
+    }
 
     // Check if otp matches
     const isMatch = await user.matchOtp(otp);
