@@ -44,3 +44,20 @@ exports.protect = asyncHandler(async (req, res, next) => {
       .json({ success: false, message: "Not authorized to access this route" });
   }
 });
+
+// Check if user is verified
+exports.verifiedUser = asyncHandler(async (req, res, next) => {
+  try {
+    if (req.user && req.user.verified === false) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Verification not done" });
+    }
+
+    next();
+  } catch (err) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Verification not done" });
+  }
+});

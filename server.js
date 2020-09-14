@@ -11,6 +11,7 @@ const connectDB = require("./config/db");
 
 // * Routes
 const auth = require("./routes/auth");
+const user = require("./routes/user");
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(
 
 // * Routes
 app.use("/api/auth", auth);
+app.use("/api/user", user);
 
 // * Connect to database
 connectDB();

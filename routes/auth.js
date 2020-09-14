@@ -5,7 +5,7 @@ const express = require("express");
 // * Models
 
 // * Controllers
-const { register, login } = require("../controllers/auth");
+const { register, login, getMe } = require("../controllers/auth");
 const { verifyOtp } = require("../controllers/auth");
 
 // * Middleware
@@ -17,5 +17,6 @@ const router = express.Router();
 router.post("/register", register);
 router.post("/login", login);
 router.post("/verify-otp", protect, verifyOtp);
+router.get("/me", protect, getMe);
 
 module.exports = router;

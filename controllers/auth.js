@@ -58,7 +58,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     const { email, password } = value;
 
     // Check for user
-    const user = await User.findOne({ email }).select("+password");
+    const user = await await User.findOne({ email }).select("+password");
 
     if (!user) {
       return res
@@ -91,7 +91,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 exports.verifyOtp = asyncHandler(async (req, res, next) => {
   try {
     //TODO Add timestamp check
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id).exec();
     const { value, error } = validationSchema.verifyOtp(req.body);
     if (error)
       return res
@@ -125,6 +125,24 @@ exports.verifyOtp = asyncHandler(async (req, res, next) => {
       success: false,
       err,
     });
+  }
+});
+
+// @desc     Get current logged in user
+// @route    GET /api/auth/me
+// @access   Private
+
+exports.getMe = asyncHandler(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ success: false, data: err });
   }
 });
 
