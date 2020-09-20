@@ -60,8 +60,13 @@ const UserSchema = new mongoose.Schema({
     default: new Date(),
   },
   otp: {
-    type: String,
-    select: false,
+    code: {
+      type: String,
+    },
+    validity: {
+      type: Date,
+      default: new Date(Date.now() + 15 * 60 * 1000),
+    },
   },
   verified: {
     type: Boolean,
@@ -90,7 +95,7 @@ UserSchema.methods.getSignedJwtToken = function () {
 
 // Match user entered otp to otp stored in database
 UserSchema.methods.matchOtp = function (enteredOtp) {
-  if (enteredOtp !== this.otp) {
+  if (enteredOtp !== this.otp.code) {
     return false;
   }
   return true;

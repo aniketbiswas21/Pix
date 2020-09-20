@@ -24,11 +24,11 @@ exports.register = asyncHandler(async (req, res, next) => {
       specialChars: false,
     });
     console.log(otp);
-    const newValue = { ...value, otp };
+    const newValue = { ...value, otp: { code: otp } };
 
     // Create user
     const user = await User.create(newValue);
-    const message = `Wowee! Thanks for registering an account with Pix! Before you enter the land of awesomeness, We will need to verify your email. You can do so by entering ${user.otp}`;
+    const message = `Wowee! Thanks for registering an account with Pix! Before you enter the land of awesomeness, We will need to verify your email. You can do so by entering ${user.otp.code}`;
     await sendEmail({
       email: user.email,
       subject: "Verification OTP",
@@ -114,6 +114,14 @@ exports.verifyOtp = asyncHandler(async (req, res, next) => {
         .status(401)
         .json({ success: false, message: "Invalid Otp Entered" });
     }
+
+    const currentTime = new Date(Date.now());
+    if (user.otp.validity < currentTime) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Otp has expired" });
+    }
+
     user.verified = true;
     await user.save({ validateBeforeSave: false });
     return res

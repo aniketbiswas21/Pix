@@ -5,7 +5,7 @@ const express = require("express");
 // * Models
 
 // * Controllers
-const { followById } = require("../controllers/user");
+const { followById, unfollowById } = require("../controllers/user");
 
 // * Middleware
 const { protect, verifiedUser } = require("../middleware/auth");
@@ -14,5 +14,6 @@ const { protect, verifiedUser } = require("../middleware/auth");
 const router = express.Router();
 
 router.post("/follow/:id", [protect, verifiedUser], followById);
+router.post("/unfollow/:id", [protect, verifiedUser], unfollowById);
 
 module.exports = router;
