@@ -28,7 +28,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 
     // Create user
     const user = await User.create(newValue);
-    const message = `Wowee! Thanks for registering an account with Pix! Before you enter the land of awesomeness, We will need to verify your email. You can do so by entering ${user.otp.code}`;
+    const message = `Wowee! Thanks for registering an account with Pix! Before you enter the land of awesomeness, We will need to verify your email. You can do so by entering ${user.otp.code}. This code is valid for only 15 minutes.`;
     await sendEmail({
       email: user.email,
       subject: "Verification OTP",
@@ -90,7 +90,6 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @access   Private
 exports.verifyOtp = asyncHandler(async (req, res, next) => {
   try {
-    //TODO Add timestamp check
     const user = await User.findById(req.user.id).exec();
     const { value, error } = validationSchema.verifyOtp(req.body);
     if (error)
@@ -127,6 +126,52 @@ exports.verifyOtp = asyncHandler(async (req, res, next) => {
     return res
       .status(200)
       .json({ success: true, message: "Sucessfully Verified" });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      err,
+    });
+  }
+});
+
+// @desc     Regenerate Otp
+// @route    PUT /api/auth/regenerate-otp
+// @access   Private
+exports.regenerateOtp = asyncHandler(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).exec();
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User does not exist" });
+    }
+    // if user is already verified
+    if (user.verified === true) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User already verified" });
+    }
+    user.otp.code = undefined;
+    user.otp.validity = undefined;
+    const otp = otpGenerator.generate(6, {
+      upperCase: false,
+      specialChars: false,
+    });
+    console.log(otp);
+    const validity = new Date(Date.now() + 15 * 60 * 1000);
+    user.otp.code = otp;
+    user.otp.validity = validity;
+    await user.save({ validateBeforeSave: false });
+    const message = `Wowee! Thanks for registering an account with Pix! Before you enter the land of awesomeness, We will need to verify your email. You can do so by entering ${user.otp.code}. This code is valid for only 15 minutes.`;
+    await sendEmail({
+      email: user.email,
+      subject: "Verification OTP",
+      message,
+    });
+    return res
+      .status(200)
+      .json({ success: true, message: "Sucessfully Regenerated OTP" });
   } catch (err) {
     console.log(err);
     res.status(400).json({

@@ -5,7 +5,12 @@ const express = require("express");
 // * Models
 
 // * Controllers
-const { register, login, getMe } = require("../controllers/auth");
+const {
+  register,
+  login,
+  getMe,
+  regenerateOtp,
+} = require("../controllers/auth");
 const { verifyOtp } = require("../controllers/auth");
 
 // * Middleware
@@ -18,5 +23,6 @@ router.post("/register", register);
 router.post("/login", login);
 router.post("/verify-otp", protect, verifyOtp);
 router.get("/me", protect, getMe);
+router.put("/regenerate-otp", protect, regenerateOtp);
 
 module.exports = router;
