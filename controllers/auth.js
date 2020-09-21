@@ -181,6 +181,45 @@ exports.regenerateOtp = asyncHandler(async (req, res, next) => {
   }
 });
 
+// @desc     Update Profile Pic
+// @route    PUT /api/auth/update-profile-pic
+// @access   Private
+exports.updateProfilePic = asyncHandler(async (req, res, next) => {
+  try {
+    let user = await User.findById(req.user._id).exec();
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User does not exist" });
+    }
+    //check if there is a file
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Please upload a file" });
+    }
+    const { value, error } = validationSchema.updateProfilePic({
+      photo: req.file.filename,
+    });
+    if (error)
+      return res
+        .status(400)
+        .json({ success: false, message: error.details[0].message });
+    user = await User.findByIdAndUpdate(req.user._id, {
+      photo: value.photo,
+    });
+    return res
+      .status(200)
+      .json({ success: true, message: "Sucessfully updated profile pic" });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      err,
+    });
+  }
+});
+
 // @desc     Get current logged in user
 // @route    GET /api/auth/me
 // @access   Private

@@ -24,3 +24,10 @@ exports.verifyOtp = (body) => {
   });
   return schema.validate(body);
 };
+
+exports.updateProfilePic = (body) => {
+  const schema = Joi.object({
+    photo: Joi.string(),
+  });
+  return schema.validate(body);
+};
