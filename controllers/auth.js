@@ -34,7 +34,7 @@ exports.register = asyncHandler(async (req, res, next) => {
       subject: "Verification OTP",
       message,
     });
-    sendTokenResponse(user, 200, res);
+    sendTokenResponse(user, 200, req, res);
   } catch (err) {
     console.log(err);
     res.status(400).json({
@@ -75,7 +75,7 @@ exports.login = asyncHandler(async (req, res, next) => {
         .json({ success: false, message: "Invalid Credentials" });
     }
 
-    sendTokenResponse(user, 200, res);
+    sendTokenResponse(user, 200, req, res);
   } catch (err) {
     console.log(err);
     res.status(400).json({
@@ -241,21 +241,23 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 });
 
 // Get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, res) => {
+const sendTokenResponse = (user, statusCode, req, res) => {
   // Create token
   const token = user.getSignedJwtToken();
+  req.session.token = token;
+  res.status(statusCode).json({ success: true, token });
 
-  const options = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true,
-  };
-  if (process.env.NODE_ENV === "production") {
-    options.secure = true;
-  }
-  res.status(statusCode).cookie("token", token, options).json({
-    success: true,
-    token,
-  });
+  // const options = {
+  //   expires: new Date(
+  //     Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+  //   ),
+  //   httpOnly: true,
+  // };
+  // if (process.env.NODE_ENV === "production") {
+  //   options.secure = true;
+  // }
+  // res.status(statusCode).cookie("token", token, options).json({
+  //   success: true,
+  //   token,
+  // });
 };
