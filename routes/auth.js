@@ -4,6 +4,7 @@ const path = require("path");
 // * NPM packages
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
+const passport = require("passport");
 
 // * Models
 
@@ -65,5 +66,25 @@ router.put(
   [protect, verifiedUser, upload],
   updateProfilePic
 );
+
+// auth with google
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+// callback for google auth
+router.get("/google/redirect", passport.authenticate("google"), (req, res) => {
+  res.redirect("http://localhost:3000/");
+});
+
+// auth logout
+router.get("/logout", (req, res) => {
+  // handle with passport
+  req.logout();
+  res.redirect("http://localhost:3000/");
+});
 
 module.exports = router;

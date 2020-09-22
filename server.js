@@ -5,9 +5,12 @@ require("dotenv").config({ path: __dirname + "/.env" });
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
+const cookieSession = require("cookie-session");
+const passport = require("passport");
 
 // * Config
 const connectDB = require("./config/db");
+const passportSetup = require("./config/passport-setup");
 
 // * Routes
 const auth = require("./routes/auth");
@@ -15,11 +18,21 @@ const user = require("./routes/user");
 
 const app = express();
 
+//initiaise passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 //* Middleware
 app.use(express.json());
 
 // Cookie Parser
 app.use(cookieParser());
+app.use(
+  cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [process.env.COOKIE_KEY],
+  })
+);
 
 //Dev loggin middleware
 if (process.env.NODE_env === "development") {

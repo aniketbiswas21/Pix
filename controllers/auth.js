@@ -226,7 +226,9 @@ exports.updateProfilePic = asyncHandler(async (req, res, next) => {
 
 exports.getMe = asyncHandler(async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id).populate(
+      "followers following"
+    );
 
     res.status(200).json({
       success: true,
