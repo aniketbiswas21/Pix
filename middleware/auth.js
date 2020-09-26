@@ -21,7 +21,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   } else if (req.user) {
     next();
   }
-
+  console.log(req.user);
   // Make sure token exists
   if (!token) {
     return res

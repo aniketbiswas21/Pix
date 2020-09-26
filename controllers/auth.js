@@ -37,7 +37,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     sendTokenResponse(user, 200, req, res);
   } catch (err) {
     console.log(err);
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       err,
     });
@@ -78,7 +78,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     sendTokenResponse(user, 200, req, res);
   } catch (err) {
     console.log(err);
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       err,
     });
@@ -128,7 +128,7 @@ exports.verifyOtp = asyncHandler(async (req, res, next) => {
       .json({ success: true, message: "Sucessfully Verified" });
   } catch (err) {
     console.log(err);
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       err,
     });
@@ -174,7 +174,7 @@ exports.regenerateOtp = asyncHandler(async (req, res, next) => {
       .json({ success: true, message: "Sucessfully Regenerated OTP" });
   } catch (err) {
     console.log(err);
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       err,
     });
@@ -213,7 +213,7 @@ exports.updateProfilePic = asyncHandler(async (req, res, next) => {
       .json({ success: true, message: "Sucessfully updated profile pic" });
   } catch (err) {
     console.log(err);
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       err,
     });
@@ -226,17 +226,23 @@ exports.updateProfilePic = asyncHandler(async (req, res, next) => {
 
 exports.getMe = asyncHandler(async (req, res, next) => {
   try {
+    console.log(req.user);
     const user = await User.findById(req.user.id).populate(
       "followers following"
     );
-
-    res.status(200).json({
+    if (!user) {
+      return res.status(200).json({
+        success: false,
+        data: "No user found",
+      });
+    }
+    return res.status(200).json({
       success: true,
       data: user,
     });
   } catch (err) {
     console.log(err);
-    res.status(400).json({ success: false, data: err });
+    return res.status(400).json({ success: false, data: err });
   }
 });
 
