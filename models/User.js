@@ -55,6 +55,12 @@ const UserSchema = new mongoose.Schema({
       ref: "Story",
     },
   ],
+  taggedPosts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+    },
+  ],
   joinedOn: {
     type: Date,
     default: new Date(),

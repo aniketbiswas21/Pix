@@ -24,7 +24,7 @@ passport.use(
       const user = await User.findOne({ email: profile._json.email });
       if (user) {
         console.log("user exists as \n" + user);
-        done(null, user);
+        return done(null, user);
       } else {
         console.log(profile);
         let newUser = new User({
@@ -37,7 +37,7 @@ passport.use(
         });
         newUser = await newUser.save();
         console.log("new user created \n" + newUser);
-        done(null, newUser);
+        return done(null, newUser);
       }
     }
   )

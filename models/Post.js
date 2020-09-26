@@ -24,6 +24,7 @@ const PostSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  taggedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
