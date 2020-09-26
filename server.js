@@ -18,11 +18,7 @@ const user = require("./routes/user");
 
 const app = express();
 
-//initiaise passport
-app.use(passport.initialize());
-app.use(passport.session());
-
-//* Middleware
+// * Middleware
 app.use(express.json());
 
 // Cookie Parser
@@ -31,9 +27,13 @@ app.use(
   cookieSession({
     maxAge: 24 * 60 * 60 * 1000,
     keys: [process.env.COOKIE_KEY],
-    name: "token",
+    // name: "token",
   })
 );
+
+//initiaise passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Dev loggin middleware
 if (process.env.NODE_env === "development") {

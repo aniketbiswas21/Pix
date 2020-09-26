@@ -18,6 +18,8 @@ exports.protect = asyncHandler(async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   } else if (req.session.token) {
     token = req.session.token;
+  } else if (req.user) {
+    next();
   }
 
   // Make sure token exists
