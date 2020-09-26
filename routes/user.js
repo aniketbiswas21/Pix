@@ -8,7 +8,12 @@ const { v4: uuidv4 } = require("uuid");
 // * Models
 
 // * Controllers
-const { followById, unfollowById } = require("../controllers/user");
+const {
+  followById,
+  unfollowById,
+  getTimeline,
+  explorePosts,
+} = require("../controllers/user");
 const { addPost } = require("../controllers/user");
 
 // * Middleware
@@ -49,5 +54,7 @@ const router = express.Router();
 router.post("/follow/:id", [protect, verifiedUser], followById);
 router.post("/unfollow/:id", [protect, verifiedUser], unfollowById);
 router.post("/add-post", [protect, verifiedUser, upload], addPost);
+router.get("/timeline", [protect, verifiedUser], getTimeline);
+router.get("/explore-posts", explorePosts);
 
 module.exports = router;

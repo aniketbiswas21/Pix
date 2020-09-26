@@ -146,3 +146,47 @@ exports.addPost = asyncHandler(async (req, res, next) => {
     });
   }
 });
+
+// @desc     Get User's timeline
+// @route    GET /api/user/timeline
+// @access   Private
+
+exports.getTimeline = asyncHandler(async (req, res, next) => {
+  try {
+    // The following list of the current user
+    const followingList = req.user.following;
+    const posts = await Post.find({ postedBy: { $in: followingList } }).exec();
+
+    res.status(200).json({
+      success: true,
+      data: posts,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});
+
+// @desc     Get All Posts
+// @route    GET /api/user/explore-posts
+// @access   Public
+
+exports.explorePosts = asyncHandler(async (req, res, next) => {
+  try {
+    const posts = await Post.find({}).exec();
+
+    res.status(200).json({
+      success: true,
+      data: posts,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});
