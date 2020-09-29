@@ -20,7 +20,9 @@ function App() {
     }
   };
   const login = async () => {
-    const res = await axios.post("http://localhost:5000/api/auth/login", user);
+    const res = await axios.post("http://localhost:5000/api/auth/login", user, {
+      withCredentials: true,
+    });
     if (res) {
       console.log(res.data);
     }

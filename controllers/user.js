@@ -107,46 +107,6 @@ exports.unfollowById = asyncHandler(async (req, res, next) => {
   }
 });
 
-// @desc     Add a post
-// @route    POST /api/user/add-post
-// @access   Private
-
-exports.addPost = asyncHandler(async (req, res, next) => {
-  try {
-    let body = { ...req.body, photo: req.file.filename };
-    const { value, error } = validationSchema.addPost(body);
-    if (error) {
-      return res
-        .status(400)
-        .json({ success: false, message: error.details[0].message });
-    }
-    const newValue = { ...value, postedBy: req.user._id };
-    const post = await Post.create(newValue);
-
-    // Only executing this block if taggedUsers are there
-    if (post && post.taggedUsers.length > 0) {
-      // Add post to each tagged users model
-      //TODO Search for a better approach
-      for (let item of post.taggedUsers) {
-        let taggedUser = await User.findByIdAndUpdate(item, {
-          $push: { taggedPosts: post },
-        });
-      }
-    }
-
-    res.status(200).json({
-      success: true,
-      data: post,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      success: false,
-      data: err,
-    });
-  }
-});
-
 // @desc     Get User's timeline
 // @route    GET /api/user/timeline
 // @access   Private
