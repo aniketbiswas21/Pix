@@ -8,3 +8,10 @@ exports.addPost = (body) => {
   });
   return schema.validate(body);
 };
+
+exports.addComment = (body) => {
+  const schema = Joi.object({
+    comment: Joi.string().required(),
+  });
+  return schema.validate(body);
+};

@@ -5,7 +5,7 @@ const path = require("path");
 const CommentSchema = new mongoose.Schema({
   comment: {
     type: String,
-    required: [true, "Please upload a Photo"],
+    required: [true, "Please add a comment"],
     maxlength: 1000,
   },
   likes: [
@@ -13,6 +13,10 @@ const CommentSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
     },
   ],
+  post: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post",
+  },
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

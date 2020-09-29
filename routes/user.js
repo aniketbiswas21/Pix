@@ -14,7 +14,7 @@ const {
   getTimeline,
   explorePosts,
 } = require("../controllers/user");
-const { addPost, getPostById } = require("../controllers/post");
+const { addPost, getPostById, addComment } = require("../controllers/post");
 
 // * Middleware
 const { protect, verifiedUser } = require("../middleware/auth");
@@ -57,5 +57,6 @@ router.post("/add-post", [protect, verifiedUser, upload], addPost);
 router.get("/timeline", [protect, verifiedUser], getTimeline);
 router.get("/explore-posts", explorePosts);
 router.get("/post/:id", [protect, verifiedUser], getPostById);
+router.post("/post-comment/:id", [protect, verifiedUser], addComment);
 
 module.exports = router;
