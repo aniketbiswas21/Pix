@@ -163,6 +163,49 @@ exports.likeComment = asyncHandler(async (req, res, next) => {
   }
 });
 
+// @desc     Unlike a comment
+// @route    POST /api/user/unlike-comment/:id
+// @access   Private
+
+exports.unlikeComment = asyncHandler(async (req, res, next) => {
+  try {
+    let comment = await Comment.findById(req.params.id);
+    if (!comment) {
+      return res.status(400).json({
+        success: false,
+        message: `Comment with the id of ${req.params.id} doesn't exist`,
+      });
+    }
+    // Check if the user has already liked the comment
+    if (comment.likes && comment.likes.includes(req.user._id) === false) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "You have to like the comment first.",
+        });
+    }
+    comment = await Comment.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: { likes: req.user._id },
+      },
+      { new: true, runValidators: false }
+    );
+
+    res.status(200).json({
+      success: true,
+      data: comment,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});
+
 // @desc     Like a post
 // @route    POST /api/user/like-post/:id
 // @access   Private
