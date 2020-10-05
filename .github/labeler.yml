@@ -1,5 +1,0 @@
-frontend:
-- any: ['client/src/**/*.js']
-
-backend:
-- any: ['**/*.js']
