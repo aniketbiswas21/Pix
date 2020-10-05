@@ -115,7 +115,9 @@ exports.getTimeline = asyncHandler(async (req, res, next) => {
   try {
     // The following list of the current user
     const followingList = req.user.following;
-    const posts = await Post.find({ postedBy: { $in: followingList } }).exec();
+    const posts = await Post.find({ postedBy: { $in: followingList } })
+      .populate("postedBy comments taggedUsers")
+      .exec();
 
     res.status(200).json({
       success: true,
@@ -136,7 +138,9 @@ exports.getTimeline = asyncHandler(async (req, res, next) => {
 
 exports.explorePosts = asyncHandler(async (req, res, next) => {
   try {
-    const posts = await Post.find({}).exec();
+    const posts = await Post.find({})
+      .populate("postedBy comments taggedUsers")
+      .exec();
 
     res.status(200).json({
       success: true,

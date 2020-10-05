@@ -8,6 +8,7 @@ const validationSchema = require("../validationSchemas/Post");
 const User = require("../models/User");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
+const { connect } = require("mongoose");
 
 // @desc     Add a post
 // @route    POST /api/user/add-post
@@ -108,6 +109,46 @@ exports.addComment = asyncHandler(async (req, res, next) => {
     post = await Post.findByIdAndUpdate(req.params.id, {
       $push: { comments: comment._id },
     });
+
+    res.status(200).json({
+      success: true,
+      data: comment,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});
+
+// @desc     Like a comment
+// @route    POST /api/user/like-comment/:id
+// @access   Private
+
+exports.likeComment = asyncHandler(async (req, res, next) => {
+  try {
+    let comment = await Comment.findById(req.params.id);
+    if (!comment) {
+      return res.status(400).json({
+        success: false,
+        message: `Comment with the id of ${req.params.id} doesn't exist`,
+      });
+    }
+    // Check if the user has already liked the comment
+    if (comment.likes && comment.likes.includes(req.user._id) === true) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Already liked the comment" });
+    }
+    comment = await Comment.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: { likes: req.user._id },
+      },
+      { new: true, runValidators: false }
+    );
 
     res.status(200).json({
       success: true,
