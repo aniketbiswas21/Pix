@@ -162,3 +162,83 @@ exports.likeComment = asyncHandler(async (req, res, next) => {
     });
   }
 });
+
+// @desc     Like a post
+// @route    POST /api/user/like-post/:id
+// @access   Private
+
+exports.likePost = asyncHandler(async (req, res, next) => {
+  try {
+    let post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(400).json({
+        success: false,
+        message: `Post with the id of ${req.params.id} doesn't exist`,
+      });
+    }
+    // Check if the user has already liked the post
+    if (post.likes && post.likes.includes(req.user._id) === true) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Already liked the post" });
+    }
+    post = await Post.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: { likes: req.user._id },
+      },
+      { new: true, runValidators: false }
+    );
+
+    res.status(200).json({
+      success: true,
+      data: post,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});
+
+// @desc     Unlike a post
+// @route    POST /api/user/unlike-post/:id
+// @access   Private
+
+exports.unlikePost = asyncHandler(async (req, res, next) => {
+  try {
+    let post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(400).json({
+        success: false,
+        message: `Post with the id of ${req.params.id} doesn't exist`,
+      });
+    }
+    // Check if the user has liked the post in the first place
+    if (post.likes && post.likes.includes(req.user._id) === false) {
+      return res
+        .status(400)
+        .json({ success: false, message: "You have to like the post first." });
+    }
+    post = await Post.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: { likes: req.user._id },
+      },
+      { new: true, runValidators: false }
+    );
+
+    res.status(200).json({
+      success: true,
+      data: post,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});
