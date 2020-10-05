@@ -178,12 +178,10 @@ exports.unlikeComment = asyncHandler(async (req, res, next) => {
     }
     // Check if the user has already liked the comment
     if (comment.likes && comment.likes.includes(req.user._id) === false) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "You have to like the comment first.",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "You have to like the comment first.",
+      });
     }
     comment = await Comment.findByIdAndUpdate(
       req.params.id,
