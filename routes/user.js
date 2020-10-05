@@ -21,6 +21,7 @@ const {
   likeComment,
   likePost,
   unlikePost,
+  unlikeComment,
 } = require("../controllers/post");
 
 // * Middleware
@@ -66,6 +67,7 @@ router.get("/explore-posts", explorePosts);
 router.get("/post/:id", [protect, verifiedUser], getPostById);
 router.post("/post-comment/:id", [protect, verifiedUser], addComment);
 router.post("/like-comment/:id", [protect, verifiedUser], likeComment);
+router.post("/unlike-comment/:id", [protect, verifiedUser], unlikeComment);
 router.post("/like-post/:id", [protect, verifiedUser], likePost);
 router.post("/unlike-post/:id", [protect, verifiedUser], unlikePost);
 
