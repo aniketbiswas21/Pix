@@ -46,7 +46,7 @@ function App() {
       <button onClick={login}>Login</button>
       <br />
       <button onClick={fetchProfile}>Get Profile</button>
-      {profile && <p>{profile}</p>}
+      {profile && <p>{profile.data.name}</p>}
     </div>
   );
 }

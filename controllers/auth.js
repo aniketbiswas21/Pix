@@ -231,18 +231,18 @@ exports.getMe = asyncHandler(async (req, res, next) => {
       "followers following"
     );
     if (!user) {
-      return res.status(200).json({
+      return res.status(400).json({
         success: false,
         data: "No user found",
       });
     }
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       data: user,
     });
   } catch (err) {
     console.log(err);
-    return res.status(400).json({ success: false, data: err });
+    res.status(400).json({ success: false, data: err });
   }
 });
 

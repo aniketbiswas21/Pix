@@ -16,29 +16,35 @@ exports.protect = asyncHandler(async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
+  } else if (req.user) {
+    // next();
   } else if (req.session.token) {
     token = req.session.token;
-  } else if (req.user) {
-    next();
   }
-  console.log(req.user);
+
   // Make sure token exists
-  if (!token) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Not authorized to access this route" });
+  if (!token && req.user === null) {
+    return res.status(401).json({
+      success: false,
+      message: "Not authorized to access this route",
+    });
   }
 
   try {
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (req.user) {
+      next();
+    } else {
+      // Verify token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log(decoded);
+      console.log(decoded);
 
-    req.user = await User.findById(decoded.id);
+      req.user = await User.findById(decoded.id);
 
-    next();
+      next();
+    }
   } catch (err) {
+    console.log("Error", err);
     return res
       .status(401)
       .json({ success: false, message: "Not authorized to access this route" });
