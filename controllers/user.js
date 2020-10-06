@@ -116,7 +116,21 @@ exports.getTimeline = asyncHandler(async (req, res, next) => {
     // The following list of the current user
     const followingList = req.user.following;
     const posts = await Post.find({ postedBy: { $in: followingList } })
-      .populate("postedBy comments taggedUsers")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "postedBy",
+          select: "name photo",
+        },
+      })
+      .populate({
+        path: "postedBy",
+        select: "name photo",
+      })
+      .populate({
+        path: "taggedUsers",
+        select: "name photo",
+      })
       .exec();
 
     res.status(200).json({
@@ -139,7 +153,21 @@ exports.getTimeline = asyncHandler(async (req, res, next) => {
 exports.explorePosts = asyncHandler(async (req, res, next) => {
   try {
     const posts = await Post.find({})
-      .populate("postedBy comments taggedUsers")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "postedBy",
+          select: "name photo",
+        },
+      })
+      .populate({
+        path: "postedBy",
+        select: "name photo",
+      })
+      .populate({
+        path: "taggedUsers",
+        select: "name photo",
+      })
       .exec();
 
     res.status(200).json({

@@ -64,7 +64,22 @@ exports.addPost = asyncHandler(async (req, res, next) => {
 exports.getPostById = asyncHandler(async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id)
-      .populate("taggedUsers postedBy comments")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "postedBy",
+          select: "name photo",
+        },
+      })
+      .populate({
+        path: "postedBy",
+        select: "name photo",
+      })
+      .populate({
+        path: "taggedUsers",
+        select: "name photo",
+      })
+      .populate({ path: "likes", select: "name photo" })
       .exec();
     if (!post) {
       return res
