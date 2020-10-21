@@ -5,7 +5,7 @@ const OAuth2 = google.auth.OAuth2;
 const oauth2Client = new OAuth2(
   process.env.GMAIL_OAUTH_CLIENT_ID, // ClientID
   process.env.GMAIL_OAUTH_CLIENT_SECRET, // Client Secret
-  "https://developers.google.com/oauthplayground" // Redirect URL
+  "https://developers.google.com/oauthplayground"  // Redirect URL
 );
 
 oauth2Client.setCredentials({
