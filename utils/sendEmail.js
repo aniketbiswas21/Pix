@@ -1,13 +1,29 @@
 const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
+
+const oauth2Client = new OAuth2(
+  process.env.GMAIL_OAUTH_CLIENT_ID, // ClientID
+  process.env.GMAIL_OAUTH_CLIENT_SECRET, // Client Secret
+  "https://developers.google.com/oauthplayground" // Redirect URL
+);
+
+oauth2Client.setCredentials({
+  refresh_token: process.env.GMAIL_REFRESH_TOKEN,
+});
+const accessToken = oauth2Client.getAccessToken();
 
 // async..await is not allowed in global scope, must use a wrapper
 const sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
+    service: "gmail",
     auth: {
-      user: process.env.SMTP_EMAIL,
-      pass: process.env.SMTP_PASSWORD,
+      type: "OAuth2",
+      user: "aniket.biswas75@gmail.com",
+      clientId: process.env.GMAIL_OAUTH_CLIENT_ID,
+      clientSecret: process.env.GMAIL_OAUTH_CLIENT_SECRET,
+      refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+      accessToken: accessToken,
     },
   });
 
