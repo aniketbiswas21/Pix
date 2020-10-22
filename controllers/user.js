@@ -182,3 +182,40 @@ exports.explorePosts = asyncHandler(async (req, res, next) => {
     });
   }
 });
+
+// @desc     Get a user's posts
+// @route    GET /api/user/my-posts
+// @access   Private
+
+exports.myPosts = asyncHandler(async (req, res, next) => {
+  try {
+    const posts = await Post.find({postedBy: req.user.id})
+      .populate({
+        path: "comments",
+        populate: {
+          path: "postedBy",
+          select: "name photo",
+        },
+      })
+      .populate({
+        path: "postedBy",
+        select: "name photo",
+      })
+      .populate({
+        path: "taggedUsers",
+        select: "name photo",
+      })
+      .exec();
+
+    res.status(200).json({
+      success: true,
+      data: posts,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});

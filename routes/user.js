@@ -13,6 +13,7 @@ const {
   unfollowById,
   getTimeline,
   explorePosts,
+  myPosts,
 } = require("../controllers/user");
 const {
   addPost,
@@ -70,5 +71,6 @@ router.post("/like-comment/:id", [protect, verifiedUser], likeComment);
 router.post("/unlike-comment/:id", [protect, verifiedUser], unlikeComment);
 router.post("/like-post/:id", [protect, verifiedUser], likePost);
 router.post("/unlike-post/:id", [protect, verifiedUser], unlikePost);
+router.get("/my-posts", [protect, verifiedUser], myPosts);
 
 module.exports = router;
