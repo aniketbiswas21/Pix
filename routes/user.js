@@ -24,6 +24,7 @@ const {
   unlikePost,
   unlikeComment,
 } = require("../controllers/post");
+const { addStory } = require("../controllers/story");
 
 // * Middleware
 const { protect, verifiedUser } = require("../middleware/auth");
@@ -36,8 +37,23 @@ const storage = multer.diskStorage({
   },
 });
 
+// Storage config for stories
+const storyStorage = multer.diskStorage({
+  destination: path.resolve(__dirname, "../client/public/uploads/user_story"),
+  filename: function (req, file, callback) {
+    callback(null, "Story_" + uuidv4() + path.extname(file.originalname));
+  },
+});
+
 const upload = multer({
   storage: storage,
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+}).single("photo");
+
+const uploadStory = multer({
+  storage: storyStorage,
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
@@ -72,5 +88,6 @@ router.post("/unlike-comment/:id", [protect, verifiedUser], unlikeComment);
 router.post("/like-post/:id", [protect, verifiedUser], likePost);
 router.post("/unlike-post/:id", [protect, verifiedUser], unlikePost);
 router.get("/my-posts", [protect, verifiedUser], myPosts);
+router.post("/add-story", [protect, verifiedUser, uploadStory], addStory);
 
 module.exports = router;

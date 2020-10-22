@@ -27,6 +27,7 @@ exports.addPost = asyncHandler(async (req, res, next) => {
     const post = await Post.create(newValue);
 
     if (post && post.taggedUsers.length > 10) {
+      //TODO Check this properly
       return res.status(400).json({
         success: false,
         message: "You cannot tag more than 10 people in a post",
