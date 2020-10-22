@@ -189,7 +189,7 @@ exports.explorePosts = asyncHandler(async (req, res, next) => {
 
 exports.myPosts = asyncHandler(async (req, res, next) => {
   try {
-    const posts = await Post.find({postedBy: req.user.id})
+    const posts = await Post.find({ postedBy: req.user.id })
       .populate({
         path: "comments",
         populate: {
