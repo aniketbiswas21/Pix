@@ -24,7 +24,12 @@ const {
   unlikePost,
   unlikeComment,
 } = require("../controllers/post");
-const { addStory, viewStory, exploreStory } = require("../controllers/story");
+const {
+  addStory,
+  viewStory,
+  exploreStory,
+  myStory,
+} = require("../controllers/story");
 
 // * Middleware
 const { protect, verifiedUser } = require("../middleware/auth");
@@ -91,5 +96,6 @@ router.get("/my-posts", [protect, verifiedUser], myPosts);
 router.post("/add-story", [protect, verifiedUser, uploadStory], addStory);
 router.get("/view-story/:id", [protect, verifiedUser], viewStory);
 router.get("/story-timeline", [protect, verifiedUser], exploreStory);
+router.get("/my-stories", [protect, verifiedUser], myStory);
 
 module.exports = router;

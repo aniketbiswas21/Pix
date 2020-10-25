@@ -107,3 +107,26 @@ exports.exploreStory = asyncHandler(async (req, res, next) => {
     });
   }
 });
+
+// @desc     Get a user's own stories
+// @route    GET /api/user/my-stories
+// @access   Private
+
+exports.myStory = asyncHandler(async (req, res, next) => {
+  try {
+    const stories = await Story.find({
+      postedBy: req.user.id,
+    }).populate({ path: "postedBy", select: "name photo" });
+
+    res.status(200).json({
+      success: true,
+      data: stories,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});
