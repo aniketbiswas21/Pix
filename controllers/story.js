@@ -38,3 +38,45 @@ exports.addStory = asyncHandler(async (req, res, next) => {
     });
   }
 });
+
+// @desc     View a story
+// @route    POST /api/user/view-story/:id
+// @access   Private
+
+exports.viewStory = asyncHandler(async (req, res, next) => {
+  try {
+    let story = await Story.findById(req.params.id);
+    if (!story) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Story doesn't exist" });
+    }
+    // Add to stories viewer list if the viewer is unique and is not the owner
+    if (
+      story.viewers.includes(req.user.id) === false &&
+      !story.postedBy.equals(req.user.id)
+    ) {
+      story = await Story.findByIdAndUpdate(
+        req.params.id,
+        {
+          $push: { viewers: req.user.id },
+        },
+        {
+          runValidators: false,
+          new: true,
+        }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      data: story,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});

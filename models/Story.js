@@ -7,6 +7,12 @@ const StorySchema = new mongoose.Schema({
     type: String,
     required: [true, "Please upload a Photo"],
   },
+  viewers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

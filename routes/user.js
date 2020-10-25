@@ -24,7 +24,7 @@ const {
   unlikePost,
   unlikeComment,
 } = require("../controllers/post");
-const { addStory } = require("../controllers/story");
+const { addStory, viewStory } = require("../controllers/story");
 
 // * Middleware
 const { protect, verifiedUser } = require("../middleware/auth");
@@ -89,5 +89,6 @@ router.post("/like-post/:id", [protect, verifiedUser], likePost);
 router.post("/unlike-post/:id", [protect, verifiedUser], unlikePost);
 router.get("/my-posts", [protect, verifiedUser], myPosts);
 router.post("/add-story", [protect, verifiedUser, uploadStory], addStory);
+router.get("/view-story/:id", [protect, verifiedUser], viewStory);
 
 module.exports = router;
