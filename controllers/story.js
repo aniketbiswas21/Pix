@@ -40,7 +40,7 @@ exports.addStory = asyncHandler(async (req, res, next) => {
 });
 
 // @desc     View a story
-// @route    POST /api/user/view-story/:id
+// @route    GET /api/user/view-story/:id
 // @access   Private
 
 exports.viewStory = asyncHandler(async (req, res, next) => {
@@ -71,6 +71,33 @@ exports.viewStory = asyncHandler(async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: story,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});
+
+// @desc     Get a user's story timeline
+// @route    GET /api/user/story-timeline
+// @access   Private
+
+exports.exploreStory = asyncHandler(async (req, res, next) => {
+  try {
+    // The following list of the current user
+    const followingList = req.user.following;
+    let stories = await Story.find({
+      postedBy: { $in: followingList },
+    })
+      .select("-viewers")
+      .populate({ path: "postedBy", select: "name photo" });
+
+    res.status(200).json({
+      success: true,
+      data: stories,
     });
   } catch (err) {
     console.log(err);
