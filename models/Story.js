@@ -13,12 +13,14 @@ const StorySchema = new mongoose.Schema({
   },
   postedOn: {
     type: Date,
-    default: new Date(),
+    default: Date.now(),
   },
   expiresOn: {
     type: Date,
     default: new Date(Date.now() + 24 * 60 * 60 * 1000),
   },
 });
+
+StorySchema.index({ postedOn: 1 }, { expireAfterSeconds: 60 });
 
 module.exports = mongoose.model("Story", StorySchema);
