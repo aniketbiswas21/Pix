@@ -130,3 +130,39 @@ exports.myStory = asyncHandler(async (req, res, next) => {
     });
   }
 });
+
+// @desc     Delete A Story
+// @route    DELETE /api/user/delete-story/:id
+// @access   Private
+
+exports.deleteStory = asyncHandler(async (req, res, next) => {
+  try {
+    let story = await Story.findById(req.params.id);
+
+    if (!story) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Story doesn't exist" });
+    }
+    // Check the person deleting is the owner of the story
+    if (!story.postedBy.equals(req.user.id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Not authorised to perform this action",
+      });
+    }
+
+    await story.remove();
+
+    res.status(200).json({
+      success: true,
+      data: "Successfully deleted",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});

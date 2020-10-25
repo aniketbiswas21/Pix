@@ -29,6 +29,7 @@ const {
   viewStory,
   exploreStory,
   myStory,
+  deleteStory,
 } = require("../controllers/story");
 
 // * Middleware
@@ -97,5 +98,6 @@ router.post("/add-story", [protect, verifiedUser, uploadStory], addStory);
 router.get("/view-story/:id", [protect, verifiedUser], viewStory);
 router.get("/story-timeline", [protect, verifiedUser], exploreStory);
 router.get("/my-stories", [protect, verifiedUser], myStory);
+router.delete("/delete-story/:id", [protect, verifiedUser], deleteStory);
 
 module.exports = router;

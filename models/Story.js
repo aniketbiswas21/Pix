@@ -29,4 +29,16 @@ const StorySchema = new mongoose.Schema({
 
 StorySchema.index({ postedOn: 1 }, { expireAfterSeconds: 60 });
 
+// Delete corresponding photo to blog that will be deleted
+StorySchema.post("remove", async (story, next) => {
+  fs.unlink(
+    path.resolve(
+      __dirname,
+      `../client/public/uploads/user_story/${story.photo}`
+    ),
+    (err) => console.log(err)
+  );
+  next();
+});
+
 module.exports = mongoose.model("Story", StorySchema);
