@@ -6,7 +6,11 @@ const path = require("path");
 // * Models
 
 // * Controllers
-const { addConversation, getConversation } = require("../controllers/chat");
+const {
+  addConversation,
+  getConversation,
+  getConversationById,
+} = require("../controllers/chat");
 
 // * Middleware
 const { protect, verifiedUser } = require("../middleware/auth");
@@ -16,5 +20,6 @@ const router = express.Router();
 
 router.post("/add-conversation/:id", [protect, verifiedUser], addConversation);
 router.get("/my-conversations", [protect, verifiedUser], getConversation);
+router.get("/conversation/:id", [protect, verifiedUser], getConversationById);
 
 module.exports = router;

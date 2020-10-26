@@ -78,3 +78,44 @@ exports.getConversation = asyncHandler(async (req, res, next) => {
     });
   }
 });
+
+// @desc     Get a Conversation by ID
+// @route    GET /api/chat/conversation/:id
+// @access   Private
+
+exports.getConversationById = asyncHandler(async (req, res, next) => {
+  try {
+    const conversation = await Conversation.findById(req.params.id)
+      .populate({ path: "messages" })
+      .populate({ path: "participant1", select: "name photo email" })
+      .populate({ path: "participant2", select: "name photo email" })
+      .exec();
+
+    if (!conversation) {
+      return res.status(400).json({
+        success: false,
+        data: "No conversation found",
+      });
+    }
+    // Check if the user accessing the conversation is a part of the same
+    if (
+      !conversation.participant1._id.equals(req.user.id) &&
+      !conversation.participant2._id.equals(req.user.id)
+    ) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Not Authorised to view this" });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: conversation,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});

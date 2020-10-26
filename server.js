@@ -17,6 +17,10 @@ const auth = require("./routes/auth");
 const user = require("./routes/user");
 const chat = require("./routes/chat");
 
+// * Models
+const Message = require("./models/Message");
+const Conversation = require("./models/Conversation");
+
 const app = express();
 
 // * Middleware
@@ -73,14 +77,19 @@ const server = app.listen(PORT, console.log(`Server started on Port ${PORT}`));
 
 const io = require("socket.io")(server);
 
+//Socket work for chats
 io.on("connection", (socket) => {
   socket.on("join", (room) => {
     socket.join(room);
     console.log("conversation started...");
-    socket.on("messageServer", (data) => {
+    socket.on("messageServer", async (data) => {
       console.log("received", data);
-      socket.to(group_id).emit("messageClient", data);
+      socket.to(room).emit("messageClient", data);
       console.log("emited", data);
+      const message = await Message.create(data);
+      await Conversation.findByIdAndUpdate(room, {
+        $push: { messages: message._id },
+      }).exec();
     });
   });
 

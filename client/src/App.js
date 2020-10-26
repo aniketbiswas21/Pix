@@ -1,54 +1,18 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
+import React from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
-import axios from "axios";
+import Chat from "./components/Chat";
+import Home from "./components/Home";
 
-function App() {
-  const [profile, setProfile] = useState(null);
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
-  const { email, password } = user;
-  const fetchProfile = async () => {
-    const res = await axios.get("http://localhost:5000/api/auth/me", {
-      withCredentials: true,
-      crossDomain: true,
-    });
-    if (res) {
-      setProfile(res.data);
-    }
-  };
-  const login = async () => {
-    const res = await axios.post("http://localhost:5000/api/auth/login", user, {
-      withCredentials: true,
-    });
-    if (res) {
-      console.log(res.data);
-    }
-  };
-  const onChange = (e) => {
-    setUser({ ...user, [e.target.id]: e.target.value });
-  };
+const App = () => {
   return (
     <div className="App">
-      <a href="http://localhost:5000/api/auth/google">Login with google</a>
-      <br />
-      <input id="email" value={email} onChange={onChange} />
-      <br />
-      <input
-        id="password"
-        type="password"
-        value={password}
-        onChange={onChange}
-      />
-      <br />
-      <button onClick={login}>Login</button>
-      <br />
-      <button onClick={fetchProfile}>Get Profile</button>
-      {profile && <p>{profile.data.name}</p>}
+      <Router>
+        <Route path="/" exact component={Home} />
+        <Route path="/chat/:id" component={Chat} />
+      </Router>
     </div>
   );
-}
+};
 
 export default App;
