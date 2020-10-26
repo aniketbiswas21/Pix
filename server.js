@@ -69,6 +69,24 @@ const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, console.log(`Server started on Port ${PORT}`));
 
+const io = require("socket.io")(server);
+
+io.on("connection", (socket) => {
+  socket.on("join", (room) => {
+    socket.join(room);
+    console.log("conversation started...");
+    socket.on("messageServer", (data) => {
+      console.log("received", data);
+      socket.to(group_id).emit("messageClient", data);
+      console.log("emited", data);
+    });
+  });
+
+  socket.on("disconnect", () => {
+    console.log("socket io disconnected");
+  });
+});
+
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err, promise) => {
   console.log(`Error: ${err.message}`);
