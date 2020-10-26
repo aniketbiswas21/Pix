@@ -15,6 +15,7 @@ const passportSetup = require("./config/passport-setup");
 // * Routes
 const auth = require("./routes/auth");
 const user = require("./routes/user");
+const chat = require("./routes/chat");
 
 const app = express();
 
@@ -61,6 +62,7 @@ app.use(
 // * Routes
 app.use("/api/auth", auth);
 app.use("/api/user", user);
+app.use("/api/chat", chat);
 
 // * Connect to database
 connectDB();

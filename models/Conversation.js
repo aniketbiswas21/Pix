@@ -6,10 +6,12 @@ const ConversationSchema = new mongoose.Schema({
   participant1: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
   participant2: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
   messages: [
     {
