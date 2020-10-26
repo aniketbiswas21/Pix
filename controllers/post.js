@@ -299,3 +299,39 @@ exports.unlikePost = asyncHandler(async (req, res, next) => {
     });
   }
 });
+
+// @desc     Delete A Post
+// @route    DELETE /api/user/delete-post/:id
+// @access   Private
+
+exports.deletePost = asyncHandler(async (req, res, next) => {
+  try {
+    let post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Story doesn't exist" });
+    }
+    // Check the person deleting is the owner of the story
+    if (!post.postedBy.equals(req.user.id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Not authorised to perform this action",
+      });
+    }
+
+    await post.remove();
+
+    res.status(200).json({
+      success: true,
+      data: "Successfully deleted",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: false,
+      data: err,
+    });
+  }
+});

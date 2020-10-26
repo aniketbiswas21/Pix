@@ -23,6 +23,7 @@ const {
   likePost,
   unlikePost,
   unlikeComment,
+  deletePost,
 } = require("../controllers/post");
 const {
   addStory,
@@ -99,5 +100,6 @@ router.get("/view-story/:id", [protect, verifiedUser], viewStory);
 router.get("/story-timeline", [protect, verifiedUser], exploreStory);
 router.get("/my-stories", [protect, verifiedUser], myStory);
 router.delete("/delete-story/:id", [protect, verifiedUser], deleteStory);
+router.delete("/delete-post/:id", [protect, verifiedUser], deletePost);
 
 module.exports = router;

@@ -27,9 +27,9 @@ const StorySchema = new mongoose.Schema({
   },
 });
 
-StorySchema.index({ postedOn: 1 }, { expireAfterSeconds: 60 });
+StorySchema.index({ postedOn: 1 }, { expireAfterSeconds: 24 * 60 * 60 });
 
-// Delete corresponding photo to blog that will be deleted
+// Delete corresponding photo to story that will be deleted
 StorySchema.post("remove", async (story, next) => {
   fs.unlink(
     path.resolve(

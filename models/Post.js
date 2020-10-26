@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
+const User = require("./User");
 
 const PostSchema = new mongoose.Schema({
   photo: {
@@ -33,6 +34,22 @@ const PostSchema = new mongoose.Schema({
     type: Date,
     default: new Date(),
   },
+});
+
+// Delete corresponding photo to post that will be deleted
+PostSchema.post("remove", async (post, next) => {
+  await fs.unlink(
+    path.resolve(
+      __dirname,
+      `../client/public/uploads/user_posts/${post.photo}`
+    ),
+    (err) => console.log(err)
+  );
+  await User.updateMany(
+    { taggedPosts: post._id },
+    { $pull: { taggedPosts: post._id } }
+  );
+  next();
 });
 
 module.exports = mongoose.model("Post", PostSchema);

@@ -125,7 +125,7 @@ exports.getTimeline = asyncHandler(async (req, res, next) => {
       })
       .populate({
         path: "postedBy",
-        select: "name photo",
+        select: "name photo email",
       })
       .populate({
         path: "taggedUsers",
@@ -162,7 +162,7 @@ exports.explorePosts = asyncHandler(async (req, res, next) => {
       })
       .populate({
         path: "postedBy",
-        select: "name photo",
+        select: "name photo email",
       })
       .populate({
         path: "taggedUsers",
