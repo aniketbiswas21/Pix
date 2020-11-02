@@ -1,6 +1,7 @@
 // * Utils
 const asyncHandler = require("../middleware/async");
 const validationSchema = require("../validationSchemas/Story");
+const cloudinary = require("../config/cloudinary-config");
 
 // * NPM Packages
 
@@ -16,7 +17,8 @@ const { connect } = require("mongoose");
 
 exports.addStory = asyncHandler(async (req, res, next) => {
   try {
-    let body = { ...req.body, photo: req.file.filename };
+    const result = await cloudinary.uploader.upload(req.file.path);
+    let body = { ...req.body, photo: result.secure_url };
     const { value, error } = validationSchema.addStory(body);
     if (error) {
       return res

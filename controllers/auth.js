@@ -2,6 +2,7 @@
 const asyncHandler = require("../middleware/async");
 const validationSchema = require("../validationSchemas/User");
 const sendEmail = require("../utils/sendEmail");
+const cloudinary = require("../config/cloudinary-config");
 
 // * NPM Packages
 const otpGenerator = require("otp-generator");
@@ -198,8 +199,10 @@ exports.updateProfilePic = asyncHandler(async (req, res, next) => {
         .status(400)
         .json({ success: false, message: "Please upload a file" });
     }
+
+    const result = await cloudinary.uploader.upload(req.file.path);
     const { value, error } = validationSchema.updateProfilePic({
-      photo: req.file.filename,
+      photo: result.secure_url,
     });
     if (error)
       return res

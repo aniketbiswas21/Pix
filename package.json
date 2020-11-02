@@ -12,9 +12,11 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "cloudinary": "^1.23.0",
     "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
+    "datauri": "^3.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "googleapis": "^61.0.0",

@@ -22,15 +22,7 @@ const { verifyOtp } = require("../controllers/auth");
 const { protect, verifiedUser } = require("../middleware/auth");
 
 // * Multer Config
-const storage = multer.diskStorage({
-  destination: path.resolve(
-    __dirname,
-    "../client/public/uploads/profile_images"
-  ),
-  filename: function (req, file, callback) {
-    callback(null, "Profile_" + uuidv4() + path.extname(file.originalname));
-  },
-});
+const storage = multer.diskStorage({});
 
 const upload = multer({
   storage: storage,

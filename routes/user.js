@@ -37,20 +37,16 @@ const {
 const { protect, verifiedUser } = require("../middleware/auth");
 
 // * Multer Config
-const storage = multer.diskStorage({
-  destination: path.resolve(__dirname, "../client/public/uploads/user_posts"),
-  filename: function (req, file, callback) {
-    callback(null, "Post_" + uuidv4() + path.extname(file.originalname));
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: path.resolve(__dirname, "../client/public/uploads/user_posts"),
+//   filename: function (req, file, callback) {
+//     callback(null, "Post_" + uuidv4() + path.extname(file.originalname));
+//   },
+// });
+const storage = multer.diskStorage({});
 
 // Storage config for stories
-const storyStorage = multer.diskStorage({
-  destination: path.resolve(__dirname, "../client/public/uploads/user_story"),
-  filename: function (req, file, callback) {
-    callback(null, "Story_" + uuidv4() + path.extname(file.originalname));
-  },
-});
+const storyStorage = multer.diskStorage({});
 
 const upload = multer({
   storage: storage,
