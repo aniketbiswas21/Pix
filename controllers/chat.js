@@ -32,12 +32,10 @@ exports.addConversation = asyncHandler(async (req, res, next) => {
     if (!conversation || conversation.length === 0) {
       // Check if the user is trying to start a conversation with himself
       if (user._id.equals(req.user._id)) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "You cannot talk with yourself. Or, Can you?",
-          });
+        return res.status(400).json({
+          success: false,
+          message: "You cannot talk with yourself. Or, Can you?",
+        });
       }
       let body = {
         participant1: req.user.id,
