@@ -228,7 +228,7 @@ exports.getMe = asyncHandler(async (req, res, next) => {
   try {
     console.log(req.user);
     const user = await User.findById(req.user.id).populate(
-      "followers following"
+      "followers following posts stories"
     );
     if (!user) {
       return res.status(400).json({

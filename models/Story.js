@@ -27,7 +27,7 @@ const StorySchema = new mongoose.Schema({
   },
 });
 
-StorySchema.index({ postedOn: 1 }, { expireAfterSeconds: 24 * 60 * 60 });
+StorySchema.index({ postedOn: 1 }, { expires: "1d" });
 
 // Delete corresponding photo to story that will be deleted
 StorySchema.post("remove", async (story, next) => {

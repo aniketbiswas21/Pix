@@ -5,86 +5,77 @@ const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Please add a name"],
-    minlength: 5,
-    maxlength: 100,
-  },
-  email: {
-    type: String,
-    required: [true, "Please add an Email"],
-    unique: true,
-    match: [
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      "Please add a valid email",
-    ],
-  },
-  password: {
-    type: String,
-    required: [true, "Please add a password"],
-    minlength: 6,
-    select: false, //This won't show the password in the response
-  },
-  photo: {
-    type: String,
-    default: null,
-  },
-  followers: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
-  following: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
-  posts: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Post",
-    },
-  ],
-  stories: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Story",
-    },
-  ],
-  taggedPosts: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Post",
-    },
-  ],
-  joinedOn: {
-    type: Date,
-    default: new Date(),
-  },
-  otp: {
-    code: {
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
       type: String,
+      required: [true, "Please add a name"],
+      minlength: 5,
+      maxlength: 100,
     },
-    validity: {
+    email: {
+      type: String,
+      required: [true, "Please add an Email"],
+      unique: true,
+      match: [
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "Please add a valid email",
+      ],
+    },
+    password: {
+      type: String,
+      required: [true, "Please add a password"],
+      minlength: 6,
+      select: false, //This won't show the password in the response
+    },
+    photo: {
+      type: String,
+      default: null,
+    },
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    taggedPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
+    joinedOn: {
       type: Date,
-      default: new Date(Date.now() + 15 * 60 * 1000),
+      default: new Date(),
     },
+    otp: {
+      code: {
+        type: String,
+      },
+      validity: {
+        type: Date,
+        default: new Date(Date.now() + 15 * 60 * 1000),
+      },
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    isGoogleUser: {
+      type: Boolean,
+      default: false,
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
-  verified: {
-    type: Boolean,
-    default: false,
-  },
-  isGoogleUser: {
-    type: Boolean,
-    default: false,
-  },
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
-});
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
 
 // Encrypt password using bcrypt
 UserSchema.pre("save", async function (next) {
@@ -132,5 +123,17 @@ UserSchema.methods.getResetPasswordToken = function () {
 
   return resetToken;
 };
+
+UserSchema.virtual("posts", {
+  ref: "Post",
+  localField: "_id",
+  foreignField: "postedBy",
+});
+
+UserSchema.virtual("stories", {
+  ref: "Story",
+  localField: "_id",
+  foreignField: "postedBy",
+});
 
 module.exports = mongoose.model("User", UserSchema);
