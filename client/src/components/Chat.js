@@ -46,6 +46,7 @@ const Chat = () => {
       from: conversation.participant1._id,
       to: conversation.participant2._id,
       body: message,
+      conversationId: id,
     };
     socket.emit("messageServer", messageObj);
     setMessages((messages) => [...messages, messageObj]);

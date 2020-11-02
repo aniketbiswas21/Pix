@@ -86,10 +86,10 @@ io.on("connection", (socket) => {
       console.log("received", data);
       socket.to(room).emit("messageClient", data);
       console.log("emited", data);
-      const message = await Message.create(data);
-      await Conversation.findByIdAndUpdate(room, {
-        $push: { messages: message._id },
-      }).exec();
+      await Message.create(data);
+      // await Conversation.findByIdAndUpdate(room, {
+      //   $push: { messages: message._id },
+      // }).exec();
     });
   });
 

@@ -30,6 +30,15 @@ exports.addConversation = asyncHandler(async (req, res, next) => {
       .exec();
 
     if (!conversation || conversation.length === 0) {
+      // Check if the user is trying to start a conversation with himself
+      if (user._id.equals(req.user._id)) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "You cannot talk with yourself. Or, Can you?",
+          });
+      }
       let body = {
         participant1: req.user.id,
         participant2: user._id,
@@ -85,6 +94,7 @@ exports.getConversation = asyncHandler(async (req, res, next) => {
 
 exports.getConversationById = asyncHandler(async (req, res, next) => {
   try {
+    // TODO Can be optimised
     const conversation = await Conversation.findById(req.params.id)
       .populate({ path: "messages" })
       .populate({ path: "participant1", select: "name photo email" })

@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const fs = require("fs");
-const path = require("path");
 
 const MessageSchema = new mongoose.Schema({
   from: {
@@ -23,6 +21,10 @@ const MessageSchema = new mongoose.Schema({
   seen: {
     type: Boolean,
     default: false,
+  },
+  conversationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Conversation",
   },
 });
 
