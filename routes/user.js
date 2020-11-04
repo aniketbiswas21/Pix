@@ -46,7 +46,7 @@ const { protect, verifiedUser } = require("../middleware/auth");
 //     callback(null, "Post_" + uuidv4() + path.extname(file.originalname));
 //   },
 // });
-const storage = multer.diskStorage({});
+const storage = customStorage({});
 
 // Storage config for stories
 // const storyStorage = multer.diskStorage({});
@@ -61,9 +61,9 @@ const upload = multer({
 
 const uploadStory = multer({
   storage: storyStorage,
-  // fileFilter: function (req, file, cb) {
-  //   checkFileType(file, cb);
-  // },
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
 }).single("photo");
 
 function checkFileType(file, cb) {

@@ -21,8 +21,11 @@ const { verifyOtp } = require("../controllers/auth");
 // * Middleware
 const { protect, verifiedUser } = require("../middleware/auth");
 
+// * Utils
+const customStorage = require("../config/multer-storage");
+
 // * Multer Config
-const storage = multer.diskStorage({});
+const storage = customStorage({});
 
 const upload = multer({
   storage: storage,

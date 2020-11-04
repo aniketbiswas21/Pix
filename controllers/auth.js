@@ -200,9 +200,9 @@ exports.updateProfilePic = asyncHandler(async (req, res, next) => {
         .json({ success: false, message: "Please upload a file" });
     }
 
-    const result = await cloudinary.uploader.upload(req.file.path);
+    // const result = await cloudinary.uploader.upload(req.file.path);
     const { value, error } = validationSchema.updateProfilePic({
-      photo: result.secure_url,
+      photo: req.file.url,
     });
     if (error)
       return res

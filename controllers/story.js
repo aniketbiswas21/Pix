@@ -15,7 +15,7 @@ const { connect } = require("mongoose");
 // @route    POST /api/user/add-story
 // @access   Private
 
-exports.addStory = async (req, res) => {
+exports.addStory = asyncHandler(async (req, res, next) => {
   try {
     // const result = await cloudinary.uploader.upload(req.file.path);
     let body = { ...req.body, photo: req.file.url };
@@ -38,7 +38,7 @@ exports.addStory = async (req, res) => {
       data: err,
     });
   }
-};
+});
 
 // @desc     View a story
 // @route    GET /api/user/view-story/:id

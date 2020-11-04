@@ -9,7 +9,6 @@ const cloudinary = require("../config/cloudinary-config");
 const User = require("../models/User");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
-const { connect } = require("mongoose");
 
 // @desc     Add a post
 // @route    POST /api/user/add-post
@@ -17,8 +16,8 @@ const { connect } = require("mongoose");
 
 exports.addPost = asyncHandler(async (req, res, next) => {
   try {
-    const result = await cloudinary.uploader.upload(req.file.path);
-    let body = { ...req.body, photo: result.secure_url };
+    // const result = await cloudinary.uploader.upload(req.file.path);
+    let body = { ...req.body, photo: req.file.url };
     const { value, error } = validationSchema.addPost(body);
     if (error) {
       return res
