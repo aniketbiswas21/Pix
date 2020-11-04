@@ -15,10 +15,10 @@ const { connect } = require("mongoose");
 // @route    POST /api/user/add-story
 // @access   Private
 
-exports.addStory = asyncHandler(async (req, res, next) => {
+exports.addStory = async (req, res) => {
   try {
-    const result = await cloudinary.uploader.upload(req.file.path);
-    let body = { ...req.body, photo: result.secure_url };
+    // const result = await cloudinary.uploader.upload(req.file.path);
+    let body = { ...req.body, photo: req.file.url };
     const { value, error } = validationSchema.addStory(body);
     if (error) {
       return res
@@ -27,10 +27,9 @@ exports.addStory = asyncHandler(async (req, res, next) => {
     }
     const newValue = { ...value, postedBy: req.user._id };
     const story = await Story.create(newValue);
-
     res.status(200).json({
       success: true,
-      data: story,
+      body: story,
     });
   } catch (err) {
     console.log(err);
@@ -39,7 +38,7 @@ exports.addStory = asyncHandler(async (req, res, next) => {
       data: err,
     });
   }
-});
+};
 
 // @desc     View a story
 // @route    GET /api/user/view-story/:id
