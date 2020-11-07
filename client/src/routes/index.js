@@ -2,7 +2,6 @@ import React from "react";
 import { Switch } from "react-router-dom";
 import Route from "./Route";
 import Chat from "../components/Chat";
-import Home from "../components/Home";
 import Login from "pages/Login/Login";
 
 const Routes = () => {
