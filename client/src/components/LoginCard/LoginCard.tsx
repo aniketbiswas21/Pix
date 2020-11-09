@@ -86,6 +86,9 @@ const LoginCard: React.FC = () => {
               Login
             </LoginButton>
           </Grid>
+          <Grid container>
+            <div></div>
+          </Grid>
         </Grid>
       </LoginCardBox>
     </>
