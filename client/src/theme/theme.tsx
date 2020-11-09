@@ -1,3 +1,5 @@
+import { string } from "joi";
+
 interface theme {
   body: string;
   text: string;
@@ -13,7 +15,7 @@ export const lightTheme: theme = {
 };
 
 export const darkTheme: theme = {
-  body: "#363537",
+  body: "#183d5d",
   text: "#FAFAFA",
   toggleBorder: "#6B8096",
   gradient: "linear-gradient(#091236, #1E215D)",
