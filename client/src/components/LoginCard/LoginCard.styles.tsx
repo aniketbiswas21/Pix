@@ -1,10 +1,16 @@
 import { Button, Grid, Paper } from "@material-ui/core";
 import styled from "styled-components";
+import { mobile } from "theme/breakpoints";
 
 export const LoginCardBox = styled(Paper)`
   height: 500px;
   width: 500px;
   border-radius: 15px !important;
+  ${mobile} {
+    height: 95%;
+    width: 95%;
+    margin: auto;
+  }
 `;
 
 export const Flex = styled.div`
@@ -17,13 +23,8 @@ export const Flex = styled.div`
     margin-top: auto;
     line-height: 2.6rem;
     font-weight: 600;
-    /* color: #607d8b; */
     letter-spacing: 1px;
   }
-  /* img {
-    height: 2.6rem;
-    margin-top: auto;
-  } */
 `;
 
 export const TextContainer = styled(Grid)``;
