@@ -1,5 +1,3 @@
-import { string } from "joi";
-
 interface theme {
   body: string;
   text: string;

@@ -34,6 +34,31 @@ export const LoginButton = styled(Button)`
   height: 50px;
 `;
 
-export const Border = styled.div`
-  border: 0 solid #dae1e7;
+export const BorderContainer = styled(Grid)`
+  position: relative;
+  margin-bottom: 1rem !important;
+  margin-top: 2.5rem !important;
+`;
+
+export const Border = styled.span`
+  width: 100%;
+  height: 1px;
+  background-color: #f1f5f8;
+`;
+
+export const BorderText = styled.span`
+  margin-top: -1rem;
+  font-size: 1.125rem;
+  color: #606f7b;
+`;
+
+export const GoogleButton = styled(Button)`
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.06) !important;
+  background-color: #ffffff !important;
+
+  svg {
+    width: 2.2rem;
+    height: auto;
+    object-fit: contain;
+  }
 `;

@@ -8,13 +8,18 @@ import {
   OutlinedInput,
 } from "@material-ui/core";
 import {
+  Border,
   Flex,
   LoginButton,
   LoginCardBox,
   TextContainer,
+  BorderContainer,
+  BorderText,
+  GoogleButton,
 } from "./LoginCard.styles";
 import { Link } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { ReactComponent as GoogleIcon } from "../../assets/google.svg";
 
 const LoginCard: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -86,8 +91,18 @@ const LoginCard: React.FC = () => {
               Login
             </LoginButton>
           </Grid>
-          <Grid container>
-            <div></div>
+          <BorderContainer container item xs={10} justify="center">
+            <Border />
+            <BorderText>or</BorderText>
+          </BorderContainer>
+          <Grid item container xs={10}>
+            <GoogleButton
+              variant="contained"
+              fullWidth
+              startIcon={<GoogleIcon />}
+            >
+              Continue with Google
+            </GoogleButton>
           </Grid>
         </Grid>
       </LoginCardBox>
