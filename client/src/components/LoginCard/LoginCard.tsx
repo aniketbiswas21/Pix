@@ -20,9 +20,18 @@ import {
 import { Link } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ReactComponent as GoogleIcon } from "../../assets/google.svg";
+import useLoginForm from "hooks/useLoginForm";
 
 const LoginCard: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
+  const { email, password } = user;
+  const [error, validate] = useLoginForm(user);
+  // eslint-disable-next-line
+  const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -31,8 +40,14 @@ const LoginCard: React.FC = () => {
   ) => {
     event.preventDefault();
   };
+  const onChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setUser({ ...user, [event.target.id]: event.target.value });
+  };
   return (
     <>
+      {error && <h1>error</h1>}
       <LoginCardBox elevation={5}>
         <Grid container spacing={2} justify="center">
           <Grid item xs={12}>
@@ -55,9 +70,12 @@ const LoginCard: React.FC = () => {
               </InputLabel>
               <OutlinedInput
                 id="email"
+                value={email}
                 color="secondary"
                 fullWidth
                 labelWidth={40}
+                onChange={(event) => onChange(event)}
+                error={email !== "" && emailRegex.test(email) === false}
               />
             </FormControl>
           </TextContainer>
@@ -68,8 +86,10 @@ const LoginCard: React.FC = () => {
               </InputLabel>
               <OutlinedInput
                 id="password"
+                value={password}
                 color="secondary"
                 type={showPassword ? "text" : "password"}
+                onChange={(event) => onChange(event)}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -87,7 +107,11 @@ const LoginCard: React.FC = () => {
             </FormControl>
           </TextContainer>
           <Grid container item xs={10} justify="center">
-            <LoginButton variant="contained" fullWidth>
+            <LoginButton
+              variant="contained"
+              fullWidth
+              onClick={() => validate()}
+            >
               Login
             </LoginButton>
           </Grid>
