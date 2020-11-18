@@ -1,6 +1,6 @@
 import { Button, Grid, Paper } from "@material-ui/core";
 import styled from "styled-components";
-import { mobile } from "theme/breakpoints";
+import { mobile, tablet } from "theme/breakpoints";
 
 export const LoginCardBox = styled(Paper)`
   height: 500px;
@@ -9,6 +9,11 @@ export const LoginCardBox = styled(Paper)`
   ${mobile} {
     height: 95%;
     width: 95%;
+    margin: auto;
+  }
+  ${tablet} {
+    height: 100%;
+    width: 70%;
     margin: auto;
   }
 `;
@@ -33,6 +38,11 @@ export const LoginButton = styled(Button)`
   background-color: #c2028d !important;
   color: #ffffff !important;
   height: 50px;
+  &:hover,
+  &:focus {
+    transform: translateY(-0.25em);
+    transition: all 0.25s;
+  }
 `;
 
 export const BorderContainer = styled(Grid)`
@@ -61,5 +71,11 @@ export const GoogleButton = styled(Button)`
     width: 2.2rem;
     height: auto;
     object-fit: contain;
+  }
+  &:hover,
+  &:focus {
+    transform: translateY(-0.25em);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.06) !important;
+    transition: all 0.25s;
   }
 `;
