@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   FormControl,
   Grid,
+  Grow,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -21,6 +22,7 @@ import { Link } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ReactComponent as GoogleIcon } from "../../assets/google.svg";
 import useLoginForm from "hooks/useLoginForm";
+import { Alert } from "@material-ui/lab";
 
 const LoginCard: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -29,7 +31,7 @@ const LoginCard: React.FC = () => {
     password: "",
   });
   const { email, password } = user;
-  const [error, validate] = useLoginForm(user);
+  const [error, validate, resetError] = useLoginForm(user);
   // eslint-disable-next-line
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const handleClickShowPassword = () => {
@@ -47,7 +49,6 @@ const LoginCard: React.FC = () => {
   };
   return (
     <>
-      {error && <h1>error</h1>}
       <LoginCardBox elevation={5}>
         <Grid container spacing={2} justify="center">
           <Grid item xs={12}>
@@ -63,6 +64,21 @@ const LoginCard: React.FC = () => {
               </Link>
             </span>
           </Grid>
+          {error && (
+            <Grid item xs={10}>
+              <Grow in={true}>
+                <Alert
+                  variant="filled"
+                  severity="error"
+                  onClose={() => {
+                    resetError();
+                  }}
+                >
+                  Please fill the details correctly
+                </Alert>
+              </Grow>
+            </Grid>
+          )}
           <TextContainer item xs={10}>
             <FormControl variant="outlined" fullWidth>
               <InputLabel htmlFor="email" color="secondary">

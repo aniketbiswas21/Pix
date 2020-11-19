@@ -59,7 +59,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     const { email, password } = value;
 
     // Check for user
-    const user = await await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       return res
@@ -230,8 +230,11 @@ exports.updateProfilePic = asyncHandler(async (req, res, next) => {
 exports.getMe = asyncHandler(async (req, res, next) => {
   try {
     console.log(req.user);
-    const user = await User.findById(req.user.id).populate(
-      "followers following posts stories"
+    // const user = await User.findById(req.user.id).populate(
+    //   "followers following posts stories"
+    // );
+    const user = await User.findById(req.user.id).select(
+      "name photo isGoogleUser email verified"
     );
     if (!user) {
       return res.status(400).json({
@@ -254,5 +257,7 @@ const sendTokenResponse = (user, statusCode, req, res) => {
   // Create token
   const token = user.getSignedJwtToken();
   req.session.token = token;
-  res.status(statusCode).json({ success: true, token });
+  const { name, photo, isGoogleUser, email, _id, verified } = user;
+  const userData = { name, photo, isGoogleUser, email, _id, verified, id: _id };
+  res.status(statusCode).json({ success: true, token, data: userData });
 };

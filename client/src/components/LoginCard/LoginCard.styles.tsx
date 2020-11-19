@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { mobile, tablet } from "theme/breakpoints";
 
 export const LoginCardBox = styled(Paper)`
-  height: 500px;
+  height: fit-content;
   width: 500px;
   border-radius: 15px !important;
+  padding-bottom: 2rem;
   ${mobile} {
     height: 95%;
     width: 95%;
