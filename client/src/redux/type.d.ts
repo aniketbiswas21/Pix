@@ -12,6 +12,11 @@ export interface IAuthState {
   authError: any;
 }
 
+export interface UserLoginForm {
+  email: string;
+  password: string;
+}
+
 export interface User {
   name: string;
   photo: string;

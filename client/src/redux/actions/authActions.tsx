@@ -1,1 +1,34 @@
-import { LOGIN_USER } from "../types";
+import axios from "axios";
+import { Dispatch } from "redux";
+import { AuthActionTypes, UserLoginForm } from "redux/type";
+import { CLEAR_ERROR, LOGIN_USER, USER_ERROR } from "../types";
+
+//Login User
+export const loginUser = (user: UserLoginForm) => async (
+  dispatch: Dispatch<AuthActionTypes>
+) => {
+  console.log(process.env.REACT_APP_BASE_URL);
+  try {
+    const res = await axios.post("/auth/login", user, {
+      withCredentials: true,
+    });
+    console.log(res.data);
+    dispatch({
+      type: LOGIN_USER,
+      payload: res.data.data,
+    });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: USER_ERROR,
+      payload: err.response.data,
+    });
+  }
+};
+
+//Clear Error
+export const clearError = () => {
+  return {
+    type: CLEAR_ERROR,
+  };
+};
