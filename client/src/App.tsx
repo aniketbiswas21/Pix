@@ -1,6 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
+import { Provider } from "react-redux";
+import store, { persistor } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 import Routes from "./routes";
 import { darkTheme, lightTheme } from "theme/theme";
 import { GlobalStyles } from "theme/global";
@@ -15,16 +18,20 @@ const App: React.FC = () => {
     return <div />;
   }
   return (
-    <ThemeProvider theme={themeMode}>
-      <ThemeContext.Provider value={toggleTheme}>
-        <GlobalStyles />
-        <div className="App">
-          <Router>
-            <Routes />
-          </Router>
-        </div>
-      </ThemeContext.Provider>
-    </ThemeProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <ThemeProvider theme={themeMode}>
+          <ThemeContext.Provider value={toggleTheme}>
+            <GlobalStyles />
+            <div className="App">
+              <Router>
+                <Routes />
+              </Router>
+            </div>
+          </ThemeContext.Provider>
+        </ThemeProvider>
+      </PersistGate>
+    </Provider>
   );
 };
 

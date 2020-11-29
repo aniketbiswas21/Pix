@@ -22,24 +22,33 @@ export interface User {
   verified: boolean;
 }
 
+export interface AxiosResponse<T = any> {
+  data: T;
+  status: number;
+  statusText: string;
+  headers: any;
+  config: AxiosRequestConfig;
+  request?: any;
+}
+
 export interface RegisterUserAction {
   type: typeof REGISTER_USER;
-  payload: User;
+  payload: AxiosResponse;
 }
 
 export interface LoginUserAction {
   type: typeof LOGIN_USER;
-  payload: User;
+  payload: AxiosResponse;
 }
 
 export interface GetProfileAction {
   type: typeof GET_PROFILE;
-  payload: User;
+  payload: AxiosResponse;
 }
 
 export interface UserErrorAction {
   type: typeof USER_ERROR;
-  payload: User;
+  payload: AxiosResponse;
 }
 
 export interface ClearErrorAction {
