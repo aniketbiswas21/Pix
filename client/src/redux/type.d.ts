@@ -6,6 +6,22 @@ import {
   USER_ERROR,
 } from "./types";
 
+export interface RootState {
+  auth: AuthRootState | null;
+}
+export interface AuthRootState {
+  token?: string | null;
+  refreshToken?: string | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  user: User | null;
+  error?: any;
+  authError: AuthError;
+}
+export interface AuthError {
+  success: boolean;
+  message: string;
+}
 export interface IAuthState {
   user: User | null;
   isAuthenticated: boolean;

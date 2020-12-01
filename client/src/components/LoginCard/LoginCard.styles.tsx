@@ -9,7 +9,7 @@ export const LoginCardBox = styled(Paper)`
   padding-bottom: 2rem;
   ${mobile} {
     height: 95%;
-    width: 95%;
+    width: 95% !important;
     margin: auto;
   }
   ${tablet} {

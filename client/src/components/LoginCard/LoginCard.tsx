@@ -23,6 +23,8 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ReactComponent as GoogleIcon } from "../../assets/google.svg";
 import useLoginForm from "hooks/useLoginForm";
 import { Alert } from "@material-ui/lab";
+import { useSelector } from "react-redux";
+import { RootState } from "redux/type";
 
 const LoginCard: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -30,6 +32,7 @@ const LoginCard: React.FC = () => {
     email: "",
     password: "",
   });
+  const authError = useSelector((state: RootState) => state.auth?.authError);
   const { email, password } = user;
   const [error, validate, resetError] = useLoginForm(user);
   // eslint-disable-next-line
@@ -75,6 +78,21 @@ const LoginCard: React.FC = () => {
                   }}
                 >
                   Please fill the details correctly
+                </Alert>
+              </Grow>
+            </Grid>
+          )}
+          {authError?.success === false && (
+            <Grid item xs={10}>
+              <Grow in={true}>
+                <Alert
+                  variant="filled"
+                  severity="error"
+                  onClose={() => {
+                    resetError();
+                  }}
+                >
+                  Invalid Credentials
                 </Alert>
               </Grow>
             </Grid>
