@@ -3,37 +3,47 @@ const fs = require("fs");
 const path = require("path");
 const User = require("./User");
 
-const PostSchema = new mongoose.Schema({
-  photo: {
-    type: String,
-    required: [true, "Please upload a Photo"],
-  },
-  caption: {
-    type: String,
-    default: null,
-    maxlength: 1000,
-  },
-  comments: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment",
+const PostSchema = new mongoose.Schema(
+  {
+    photo: {
+      type: String,
+      required: [true, "Please upload a Photo"],
     },
-  ],
-  likes: [
-    {
+    caption: {
+      type: String,
+      default: null,
+      maxlength: 1000,
+    },
+    taggedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-  ],
-  taggedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-  postedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    postedOn: {
+      type: Date,
+      default: new Date(),
+    },
   },
-  postedOn: {
-    type: Date,
-    default: new Date(),
-  },
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
+
+PostSchema.virtual("likes", {
+  ref: "Like",
+  localField: "_id",
+  foreignField: "post",
+});
+
+PostSchema.virtual("totalLikes", {
+  ref: "Like",
+  localField: "_id",
+  foreignField: "post",
+  count: true,
+});
+
+PostSchema.virtual("comments", {
+  ref: "Comment",
+  localField: "_id",
+  foreignField: "post",
 });
 
 // Delete corresponding photo to post that will be deleted

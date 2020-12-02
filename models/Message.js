@@ -28,4 +28,6 @@ const MessageSchema = new mongoose.Schema({
   },
 });
 
+MessageSchema.index({ conversationId: 1, sentOn: -1 }, { sparse: true });
+
 module.exports = mongoose.model("Message", MessageSchema);

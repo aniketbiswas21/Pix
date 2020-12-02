@@ -15,7 +15,7 @@ const Conversation = require("../models/Conversation");
 
 exports.addConversation = asyncHandler(async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id).exec();
+    const user = await User.findById(req.params.id).lean();
     // Check if the id in parameter corresponds to an actual user in the database
     if (!user) {
       return res.status(400).json({ success: false, message: "Invalid User" });
@@ -71,7 +71,7 @@ exports.getConversation = asyncHandler(async (req, res, next) => {
   try {
     const conversations = await Conversation.find({
       $or: [{ participant1: req.user.id }, { participant2: req.user.id }],
-    });
+    }).lean();
 
     res.status(200).json({
       success: true,

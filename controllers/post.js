@@ -1,7 +1,6 @@
 // * Utils
 const asyncHandler = require("../middleware/async");
 const validationSchema = require("../validationSchemas/Post");
-const cloudinary = require("../config/cloudinary-config");
 
 // * NPM Packages
 
@@ -9,6 +8,7 @@ const cloudinary = require("../config/cloudinary-config");
 const User = require("../models/User");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
+const Like = require("../models/Like");
 
 // @desc     Add a post
 // @route    POST /api/user/add-post
@@ -81,7 +81,14 @@ exports.getPostById = asyncHandler(async (req, res, next) => {
         path: "taggedUsers",
         select: "name photo",
       })
-      .populate({ path: "likes", select: "name photo" })
+      .populate({
+        path: "likes",
+        populate: {
+          path: "likedBy",
+          select: "name photo",
+        },
+      })
+      .populate("totalLikes")
       .exec();
     if (!post) {
       return res
@@ -114,7 +121,7 @@ exports.addComment = asyncHandler(async (req, res, next) => {
         .status(400)
         .json({ success: false, message: error.details[0].message });
     }
-    let post = await Post.findById(req.params.id).exec();
+    const post = await Post.findById(req.params.id).lean();
     if (!post) {
       return res.status(400).json({
         success: false,
@@ -123,9 +130,6 @@ exports.addComment = asyncHandler(async (req, res, next) => {
     }
     let newValue = { ...value, postedBy: req.user._id, post: post._id };
     const comment = await Comment.create(newValue);
-    post = await Post.findByIdAndUpdate(req.params.id, {
-      $push: { comments: comment._id },
-    });
 
     res.status(200).json({
       success: true,
@@ -227,7 +231,7 @@ exports.unlikeComment = asyncHandler(async (req, res, next) => {
 
 exports.likePost = asyncHandler(async (req, res, next) => {
   try {
-    let post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).lean();
     if (!post) {
       return res.status(400).json({
         success: false,
@@ -235,22 +239,22 @@ exports.likePost = asyncHandler(async (req, res, next) => {
       });
     }
     // Check if the user has already liked the post
-    if (post.likes && post.likes.includes(req.user._id) === true) {
+    const like = await Like.findOne({
+      post: post._id,
+      likedBy: req.user._id,
+    }).lean();
+    if (like) {
       return res
         .status(400)
         .json({ success: false, message: "Already liked the post" });
     }
-    post = await Post.findByIdAndUpdate(
-      req.params.id,
-      {
-        $push: { likes: req.user._id },
-      },
-      { new: true, runValidators: false }
-    );
+    let body = { post: post._id, likedBy: req.user._id };
+
+    const newLike = await Like.create(body);
 
     res.status(200).json({
       success: true,
-      data: post,
+      data: newLike,
     });
   } catch (err) {
     console.log(err);
@@ -267,30 +271,23 @@ exports.likePost = asyncHandler(async (req, res, next) => {
 
 exports.unlikePost = asyncHandler(async (req, res, next) => {
   try {
-    let post = await Post.findById(req.params.id);
-    if (!post) {
+    // Check if a like exists
+    const like = await Like.findOne({
+      post: req.params.id,
+      likedBy: req.user._id,
+    }).lean();
+    if (!like) {
       return res.status(400).json({
         success: false,
-        message: `Post with the id of ${req.params.id} doesn't exist`,
+        message: `You have to like the post first.`,
       });
     }
-    // Check if the user has liked the post in the first place
-    if (post.likes && post.likes.includes(req.user._id) === false) {
-      return res
-        .status(400)
-        .json({ success: false, message: "You have to like the post first." });
-    }
-    post = await Post.findByIdAndUpdate(
-      req.params.id,
-      {
-        $pull: { likes: req.user._id },
-      },
-      { new: true, runValidators: false }
-    );
+
+    await Like.findByIdAndDelete(like._id);
 
     res.status(200).json({
       success: true,
-      data: post,
+      message: "Successfully unliked the post",
     });
   } catch (err) {
     console.log(err);

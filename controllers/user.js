@@ -131,6 +131,14 @@ exports.getTimeline = asyncHandler(async (req, res, next) => {
         path: "taggedUsers",
         select: "name photo",
       })
+      .populate({
+        path: "likes",
+        populate: {
+          path: "likedBy",
+          select: "name photo",
+        },
+      })
+      .populate("totalLikes")
       .exec();
 
     res.status(200).json({
@@ -168,6 +176,14 @@ exports.explorePosts = asyncHandler(async (req, res, next) => {
         path: "taggedUsers",
         select: "name photo",
       })
+      .populate({
+        path: "likes",
+        populate: {
+          path: "likedBy",
+          select: "name photo",
+        },
+      })
+      .populate("totalLikes")
       .exec();
 
     res.status(200).json({

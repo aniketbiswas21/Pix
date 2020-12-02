@@ -20,6 +20,11 @@ const ConversationSchema = new mongoose.Schema(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
+ConversationSchema.index(
+  { participant1: 1, participant2: 1 },
+  { unique: true }
+);
+
 ConversationSchema.virtual("messages", {
   ref: "Message",
   localField: "_id",
