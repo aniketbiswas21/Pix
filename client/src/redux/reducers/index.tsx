@@ -1,12 +1,10 @@
 import { combineReducers } from "redux";
 import authReducer from "./authReducer";
-// import blogReducer from "./blogReducer";
-// import docReducer from "./docReducer";
+import otpReducer from "./otpReducer";
 
 //combine multiple reducers
 export default combineReducers({
   //reducers!!
   auth: authReducer,
-  //   blogs: blogReducer,
-  //   docs: docReducer,
+  otp: otpReducer,
 });

@@ -4,10 +4,12 @@ import {
   LOGIN_USER,
   REGISTER_USER,
   USER_ERROR,
+  VERIFY_OTP,
 } from "./types";
 
 export interface RootState {
   auth: AuthRootState | null;
+  otp: IOTPstate | null;
 }
 export interface AuthRootState {
   token?: string | null;
@@ -26,6 +28,12 @@ export interface IAuthState {
   user: User | null;
   isAuthenticated: boolean;
   authError: any;
+}
+
+export interface IOTPstate {
+  success: boolean | null;
+  message: string | null;
+  error: any;
 }
 
 export interface UserLoginForm {
@@ -88,3 +96,23 @@ export type AuthActionTypes =
   | GetProfileAction
   | UserErrorAction
   | ClearErrorAction;
+
+export interface VerifyOtpAction {
+  type: typeof VERIFY_OTP;
+  payload: AxiosResponse;
+}
+
+export interface OtpErrorAction {
+  type: typeof OTP_ERROR;
+  payload: AxiosResponse;
+}
+
+export interface ClearOTPErrorAction {
+  type: typeof CLEAR_OTP_ERROR;
+  payload?: AxiosResponse;
+}
+
+export type OTPActionTypes =
+  | VerifyOtpAction
+  | OtpErrorAction
+  | ClearOTPErrorAction;

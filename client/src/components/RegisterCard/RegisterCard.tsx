@@ -103,6 +103,7 @@ const RegisterCard: React.FC = () => {
                 (name.length < 5 || name.trim().length < 5) &&
                 "First Name should be of atleast 5 characters"
               }
+              color="secondary"
             />
           </TextContainer>
           <TextContainer item xs={10}>
@@ -121,6 +122,7 @@ const RegisterCard: React.FC = () => {
                 emailRegex.test(email) === false &&
                 "Please enter a valid email"
               }
+              color="secondary"
             />
           </TextContainer>
           <TextContainer item xs={10}>
@@ -143,6 +145,7 @@ const RegisterCard: React.FC = () => {
                 (password.length < 6 || password.trim().length < 6) &&
                 "Password should be atleast 6 characters"
               }
+              color="secondary"
             />
           </TextContainer>
           <TextContainer item xs={10}>
@@ -162,6 +165,7 @@ const RegisterCard: React.FC = () => {
                 confirmPassword !== password &&
                 "Passwords did not match"
               }
+              color="secondary"
             />
           </TextContainer>
           <Grid container item xs={10} justify="center">

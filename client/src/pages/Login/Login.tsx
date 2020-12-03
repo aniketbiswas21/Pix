@@ -5,6 +5,7 @@ import { Grid } from "@material-ui/core";
 import LoginCard from "components/LoginCard/LoginCard";
 import { useHistory } from "react-router-dom";
 import RegisterCard from "components/RegisterCard/RegisterCard";
+import VerifyOTPCard from "components/VerifyOTPCard/VerifyOTPCard";
 
 const Login: React.FC = () => {
   const history = useHistory();
@@ -14,6 +15,8 @@ const Login: React.FC = () => {
       return <LoginCard />;
     } else if (history.location.pathname === "/register") {
       return <RegisterCard />;
+    } else if (history.location.pathname === "/verifyOTP") {
+      return <VerifyOTPCard />;
     } else {
       return <LoginCard />;
     }
