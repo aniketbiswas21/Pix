@@ -33,6 +33,12 @@ export interface UserLoginForm {
   password: string;
 }
 
+export interface UserRegisterForm {
+  name: string;
+  email: string;
+  password: string;
+}
+
 export interface User {
   name: string;
   photo: string;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, TextField } from "@material-ui/core";
+import { Grid, Grow, TextField } from "@material-ui/core";
 import {
   Border,
   BorderContainer,
@@ -9,10 +9,12 @@ import {
   TextContainer,
 } from "components/LoginCard/LoginCard.styles";
 import { useSelector } from "react-redux";
+import useRegisterForm from "hooks/useRegisterForm";
 import { Link } from "react-router-dom";
 import { RootState } from "redux/type";
 import { RegisterButton, RegisterCardBox } from "./RegisterCard.styles";
 import { ReactComponent as GoogleIcon } from "../../assets/google.svg";
+import { Alert } from "@material-ui/lab";
 
 interface RegisterData {
   name: string;
@@ -29,6 +31,7 @@ const RegisterCard: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const authError = useSelector((state: RootState) => state.auth?.authError);
   const { name, email, password } = user;
+  const [error, validate, resetError] = useRegisterForm(user, confirmPassword);
   // eslint-disable-next-line
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -54,6 +57,36 @@ const RegisterCard: React.FC = () => {
               </Link>
             </span>
           </Grid>
+          {error && (
+            <Grid item xs={10}>
+              <Grow in={true}>
+                <Alert
+                  variant="filled"
+                  severity="error"
+                  onClose={() => {
+                    resetError();
+                  }}
+                >
+                  Please fill the details correctly
+                </Alert>
+              </Grow>
+            </Grid>
+          )}
+          {authError?.success === false && (
+            <Grid item xs={10}>
+              <Grow in={true}>
+                <Alert
+                  variant="filled"
+                  severity="error"
+                  onClose={() => {
+                    resetError();
+                  }}
+                >
+                  Invalid Credentials
+                </Alert>
+              </Grow>
+            </Grid>
+          )}
           <TextContainer item xs={10}>
             <TextField
               variant="outlined"
@@ -132,7 +165,11 @@ const RegisterCard: React.FC = () => {
             />
           </TextContainer>
           <Grid container item xs={10} justify="center">
-            <RegisterButton variant="contained" fullWidth>
+            <RegisterButton
+              variant="contained"
+              fullWidth
+              onClick={() => validate()}
+            >
               Register
             </RegisterButton>
           </Grid>
