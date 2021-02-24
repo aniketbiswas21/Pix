@@ -115,7 +115,7 @@ exports.verifyOtp = asyncHandler(async (req, res, next) => {
         .json({ success: false, message: "Invalid Otp Entered" });
     }
 
-    const currentTime = new Date(Date.now());
+    const currentTime = new Date(Date.now()).toISOString();
     if (user.otp.validity < currentTime) {
       return res
         .status(400)
