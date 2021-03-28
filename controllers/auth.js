@@ -6,6 +6,7 @@ const cloudinary = require("../config/cloudinary-config");
 
 // * NPM Packages
 const otpGenerator = require("otp-generator");
+const compareAsc = require("date-fns/compareAsc");
 
 // * Models
 const User = require("../models/User");
@@ -115,8 +116,9 @@ exports.verifyOtp = asyncHandler(async (req, res, next) => {
         .json({ success: false, message: "Invalid Otp Entered" });
     }
 
-    const currentTime = new Date(Date.now()).toISOString();
-    if (user.otp.validity < currentTime) {
+    const currentTime = new Date(Date.now());
+
+    if (compareAsc(new Date(shopkeeper.otp.validity), currentTime) === -1) {
       return res
         .status(400)
         .json({ success: false, message: "Otp has expired" });

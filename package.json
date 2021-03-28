@@ -17,6 +17,7 @@
     "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
     "datauri": "^3.0.0",
+    "date-fns": "^2.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "googleapis": "^61.0.0",
