@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Grow, TextField } from "@material-ui/core";
+import { Grid, Grow } from "@material-ui/core";
 import {
   Border,
   BorderContainer,
@@ -15,6 +15,7 @@ import { RootState } from "redux/type";
 import { RegisterButton, RegisterCardBox } from "./RegisterCard.styles";
 import { ReactComponent as GoogleIcon } from "../../assets/google.svg";
 import { Alert } from "@material-ui/lab";
+import { InputTextField } from "common/Components";
 
 interface RegisterData {
   name: string;
@@ -50,9 +51,9 @@ const RegisterCard: React.FC = () => {
             </Flex>
           </Grid>
           <Grid item xs={12} style={{ textAlign: "center" }}>
-            <span>
+            <span className="text">
               Already have an account?&nbsp;
-              <Link to="/" style={{ color: "#C2028D" }}>
+              <Link to="/" className="link">
                 Login
               </Link>
             </span>
@@ -88,7 +89,7 @@ const RegisterCard: React.FC = () => {
             </Grid>
           )}
           <TextContainer item xs={10}>
-            <TextField
+            <InputTextField
               variant="outlined"
               fullWidth
               label="Name"
@@ -107,7 +108,7 @@ const RegisterCard: React.FC = () => {
             />
           </TextContainer>
           <TextContainer item xs={10}>
-            <TextField
+            <InputTextField
               variant="outlined"
               fullWidth
               label="Email"
@@ -126,7 +127,7 @@ const RegisterCard: React.FC = () => {
             />
           </TextContainer>
           <TextContainer item xs={10}>
-            <TextField
+            <InputTextField
               variant="outlined"
               fullWidth
               label="Password"
@@ -149,7 +150,7 @@ const RegisterCard: React.FC = () => {
             />
           </TextContainer>
           <TextContainer item xs={10}>
-            <TextField
+            <InputTextField
               variant="outlined"
               fullWidth
               label="Confirm Password"

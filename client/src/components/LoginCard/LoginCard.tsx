@@ -6,7 +6,6 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
-  OutlinedInput,
 } from "@material-ui/core";
 import {
   Border,
@@ -25,6 +24,7 @@ import useLoginForm from "hooks/useLoginForm";
 import { Alert } from "@material-ui/lab";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/type";
+import { InputField } from "common/Components";
 
 const LoginCard: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -60,9 +60,9 @@ const LoginCard: React.FC = () => {
             </Flex>
           </Grid>
           <Grid item xs={12} style={{ textAlign: "center" }}>
-            <span>
+            <span className="text">
               New here?{" "}
-              <Link to="/register" style={{ color: "#C2028D" }}>
+              <Link to="/register" className="link">
                 Register
               </Link>
             </span>
@@ -99,13 +99,13 @@ const LoginCard: React.FC = () => {
           )}
           <TextContainer item xs={10}>
             <FormControl variant="outlined" fullWidth>
-              <InputLabel htmlFor="email" color="secondary">
+              <InputLabel htmlFor="email" color="primary">
                 Email
               </InputLabel>
-              <OutlinedInput
+              <InputField
                 id="email"
                 value={email}
-                color="secondary"
+                color="primary"
                 fullWidth
                 labelWidth={40}
                 onChange={(event) => onChange(event)}
@@ -115,13 +115,13 @@ const LoginCard: React.FC = () => {
           </TextContainer>
           <TextContainer item xs={10}>
             <FormControl variant="outlined" fullWidth>
-              <InputLabel htmlFor="password" color="secondary">
+              <InputLabel htmlFor="password" color="primary">
                 Password
               </InputLabel>
-              <OutlinedInput
+              <InputField
                 id="password"
                 value={password}
-                color="secondary"
+                color="primary"
                 type={showPassword ? "text" : "password"}
                 onChange={(event) => onChange(event)}
                 endAdornment={

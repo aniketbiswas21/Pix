@@ -1,7 +1,6 @@
-import { Button, Grid, Paper } from "@material-ui/core";
 import { LoginCardBox } from "components/LoginCard/LoginCard.styles";
 import styled from "styled-components";
-import { mobile, tablet } from "theme/breakpoints";
+import { mobile } from "theme/breakpoints";
 
 export const SubHeadingContainer = styled.div`
   display: flex;
@@ -21,4 +20,11 @@ export const SubHeadingContainer = styled.div`
 
 export const OTPCardBox = styled(LoginCardBox)`
   margin-top: 6rem;
+`;
+
+export const RegenerateText = styled.p`
+  color: #c2028d;
+  text-decoration: underline;
+  margin: 0;
+  cursor: pointer;
 `;

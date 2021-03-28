@@ -7,6 +7,7 @@ export const LoginCardBox = styled(Paper)`
   width: 500px;
   border-radius: 15px !important;
   padding-bottom: 2rem;
+  background-color: ${({ theme }) => theme.cardBackground} !important;
   ${mobile} {
     height: 95%;
     width: 95% !important;
@@ -16,6 +17,14 @@ export const LoginCardBox = styled(Paper)`
     height: 100%;
     width: 70%;
     margin: auto;
+  }
+
+  .text {
+    color: ${({ theme }) => theme.text};
+  }
+
+  .link {
+    color: ${({ theme }) => theme.secondaryColor};
   }
 `;
 
@@ -30,13 +39,14 @@ export const Flex = styled.div`
     line-height: 2.6rem;
     font-weight: 600;
     letter-spacing: 1px;
+    color: ${({ theme }) => theme.text};
   }
 `;
 
 export const TextContainer = styled(Grid)``;
 
 export const LoginButton = styled(Button)`
-  background-color: #c2028d !important;
+  background-color: ${({ theme }) => theme.secondaryColor} !important;
   color: #ffffff !important;
   height: 50px;
   &:hover,

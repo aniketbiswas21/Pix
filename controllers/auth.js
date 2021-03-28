@@ -92,6 +92,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @access   Private
 exports.verifyOtp = asyncHandler(async (req, res, next) => {
   try {
+    console.log(req.body);
     const user = await User.findById(req.user.id).exec();
     const { value, error } = validationSchema.verifyOtp(req.body);
     if (error)
@@ -118,7 +119,7 @@ exports.verifyOtp = asyncHandler(async (req, res, next) => {
 
     const currentTime = new Date(Date.now());
 
-    if (compareAsc(new Date(shopkeeper.otp.validity), currentTime) === -1) {
+    if (compareAsc(new Date(user.otp.validity), currentTime) === -1) {
       return res
         .status(400)
         .json({ success: false, message: "Otp has expired" });

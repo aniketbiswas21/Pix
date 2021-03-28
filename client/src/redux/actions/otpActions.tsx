@@ -3,12 +3,19 @@ import { Dispatch } from "redux";
 import { OTPActionTypes } from "redux/type";
 import { CLEAR_OTP_ERROR, OTP_ERROR, VERIFY_OTP } from "../types";
 
+interface IOTPBody {
+  otp: string;
+}
+
 //Login User
 export const verifyOtp = (code: string) => async (
   dispatch: Dispatch<OTPActionTypes>
 ) => {
   try {
-    const res = await axios.post("/auth/verify-otp", code, {
+    const otpBody: IOTPBody = {
+      otp: code,
+    };
+    const res = await axios.post("/auth/verify-otp", otpBody, {
       withCredentials: true,
     });
     dispatch({

@@ -3,21 +3,31 @@ import { Grid, Grow, TextField } from "@material-ui/core";
 import {
   Flex,
   LoginButton,
-  LoginCardBox,
   TextContainer,
 } from "../LoginCard/LoginCard.styles";
-import { Link } from "react-router-dom";
 import { Alert } from "@material-ui/lab";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "redux/type";
-import { OTPCardBox, SubHeadingContainer } from "./VerifyOTPCard.styles";
+import {
+  OTPCardBox,
+  RegenerateText,
+  SubHeadingContainer,
+} from "./VerifyOTPCard.styles";
 import { clearOtpError, verifyOtp } from "redux/actions/otpActions";
+import { useHistory } from "react-router";
+import { useMutation } from "react-query";
+import axios from "utils/axios";
 
 const VerifyOTPCard: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [otp, setOtp] = useState<string>("");
   const dispatch = useDispatch();
   const otpState = useSelector((state: RootState) => state.otp);
+  const { push } = useHistory();
+  const regenerateOTP = useMutation((regenerate) =>
+    axios.put("/auth/regenerate-otp", regenerate)
+  );
+
   const resetError = (): void => {
     setError(false);
   };
@@ -26,11 +36,14 @@ const VerifyOTPCard: React.FC = () => {
   ) => {
     setOtp(event.target.value);
   };
-  const onSubmit = (): void => {
+  const onSubmit = async (): Promise<void> => {
     if (otp.length !== 6 || otp.trim().length !== 6) {
       setError(true);
     } else {
-      dispatch(verifyOtp(otp));
+      await dispatch(verifyOtp(otp));
+      if (otpState?.success === true) {
+        push("/home");
+      }
     }
   };
   return (
@@ -72,7 +85,16 @@ const VerifyOTPCard: React.FC = () => {
                     dispatch(clearOtpError());
                   }}
                 >
-                  Verification Failed. Please Try Again!
+                  {otpState?.error.message}
+                </Alert>
+              </Grow>
+            </Grid>
+          )}
+          {regenerateOTP.isSuccess === true && (
+            <Grid item xs={10}>
+              <Grow in={true}>
+                <Alert variant="filled" onClose={() => {}} severity="success">
+                  Successfully regenerated OTP
                 </Alert>
               </Grow>
             </Grid>
@@ -96,6 +118,15 @@ const VerifyOTPCard: React.FC = () => {
               }
             />
           </TextContainer>
+          <Grid item xs={10}>
+            <RegenerateText
+              onClick={() => {
+                regenerateOTP.mutate();
+              }}
+            >
+              Regenerate OTP
+            </RegenerateText>
+          </Grid>
           <Grid container item xs={10} justify="center">
             <LoginButton
               variant="contained"

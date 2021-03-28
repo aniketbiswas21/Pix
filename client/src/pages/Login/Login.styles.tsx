@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import styled from "styled-components";
-import background from "../../assets/background.svg";
+import background from "../../assets/background-alt.svg";
 
 export const StyledBox = styled(Box)`
   background-image: url(${background});
