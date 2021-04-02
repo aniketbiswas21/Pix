@@ -11,7 +11,6 @@ const defaultState = {
   user: null,
   authError: null,
   isAuthenticated: false,
-  redirectTo: null,
 };
 export default (state: IAuthState = defaultState, action: AuthActionTypes) => {
   switch (action.type) {
@@ -21,7 +20,6 @@ export default (state: IAuthState = defaultState, action: AuthActionTypes) => {
         user: action.payload,
         isAuthenticated: true,
         authError: null,
-        redirectTo: "/verifyOTP",
       };
     case LOGIN_USER:
       return {
@@ -29,7 +27,6 @@ export default (state: IAuthState = defaultState, action: AuthActionTypes) => {
         user: action.payload,
         isAuthenticated: true,
         authError: null,
-        redirectTo: "/",
       };
     case GET_PROFILE:
       return {
@@ -37,7 +34,6 @@ export default (state: IAuthState = defaultState, action: AuthActionTypes) => {
         user: action.payload,
         isAuthenticated: true,
         authError: null,
-        redirectTo: null,
       };
     case USER_ERROR:
       return {

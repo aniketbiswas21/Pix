@@ -1,10 +1,11 @@
 import React from "react";
+import Layout from "layout/Layout/Layout";
 
 const Home: React.FC = () => {
   return (
-    <>
-      <h1>Home</h1>
-    </>
+    <Layout>
+      <h1>Hi</h1>
+    </Layout>
   );
 };
 

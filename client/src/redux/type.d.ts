@@ -19,7 +19,6 @@ export interface AuthRootState {
   user: User | null;
   error?: any;
   authError: AuthError;
-  redirectTo: string | null;
 }
 export interface AuthError {
   success: boolean;
@@ -29,7 +28,6 @@ export interface IAuthState {
   user: User | null;
   isAuthenticated: boolean;
   authError: any;
-  redirectTo: string | null;
 }
 
 export interface IOTPstate {
@@ -80,7 +78,7 @@ export interface LoginUserAction {
 
 export interface GetProfileAction {
   type: typeof GET_PROFILE;
-  payload: AxiosResponse;
+  payload: User;
 }
 
 export interface UserErrorAction {
