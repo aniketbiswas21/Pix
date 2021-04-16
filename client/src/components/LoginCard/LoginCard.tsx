@@ -158,6 +158,7 @@ const LoginCard: React.FC = () => {
               variant="contained"
               fullWidth
               startIcon={<GoogleIcon />}
+              href={"http://localhost:5000/api/auth/google"}
             >
               Continue with Google
             </GoogleButton>

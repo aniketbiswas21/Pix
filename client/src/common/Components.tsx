@@ -4,27 +4,37 @@ import { OutlinedInput, TextField } from "@material-ui/core";
 import styled from "styled-components";
 
 interface ThemeFlexProps {
-  alignItems: string;
-  justifyContent: string;
-  width: string;
+  alignItems?: "stretch" | "center" | "flex-start" | "flex-end" | "baseline";
+  justifyContent?:
+    | "flex-start"
+    | "flex-end"
+    | "center"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
+    | "stretch";
+  width?: string;
+  height?: string;
 }
 
-export const FlexRow = styled.div`
+export const FlexRow = styled.div<ThemeFlexProps>`
   display: flex;
   flex-direction: row;
   align-items: ${(props: ThemeFlexProps) => props.alignItems};
   justify-content: ${(props: ThemeFlexProps) => props.justifyContent};
   width: ${(props: ThemeFlexProps) =>
     props.width ? props.width : "fit-content"};
+  height: ${(props: ThemeFlexProps) => props.height};
 `;
 
-export const FlexCol = styled.div`
+export const FlexCol = styled.div<ThemeFlexProps>`
   display: flex;
   flex-direction: column;
   align-items: ${(props: ThemeFlexProps) => props.alignItems};
   justify-content: ${(props: ThemeFlexProps) => props.justifyContent};
   width: ${(props: ThemeFlexProps) =>
     props.width ? props.width : "fit-content"};
+  height: ${(props: ThemeFlexProps) => props.height};
 `;
 
 export const InputField = styled(OutlinedInput)`

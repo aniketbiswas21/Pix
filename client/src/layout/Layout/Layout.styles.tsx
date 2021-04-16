@@ -13,5 +13,6 @@ export const LayoutContainer = styled.div`
 
   .main {
     width: 100%;
+    margin-top: 70px;
   }
 `;

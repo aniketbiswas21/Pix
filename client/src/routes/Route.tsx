@@ -1,5 +1,5 @@
 import React from "react";
-import { useQueryClient, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Redirect, RouteProps } from "react-router-dom";
 import { getUser, setUserError } from "redux/actions";
@@ -27,20 +27,20 @@ function RouteWrapper({
 }: IProps) {
   const auth = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
-  const { isLoading } = useQuery("getProfile", fetchUser, {
+  const { isLoading, status } = useQuery("getProfile", fetchUser, {
     staleTime: 300000,
+    refetchOnWindowFocus: false,
+    retry: false,
     onSuccess: (data: IData) => {
       dispatch(getUser(data.data));
     },
     onError: (error) => {
       console.log(error);
       dispatch(setUserError(error));
-      queryClient.invalidateQueries("getProfile");
     },
   });
 
-  if (isLoading) {
+  if (isLoading && status !== "error") {
     // TODO Make a proper loading page
     return <h1>Loading...</h1>;
   }

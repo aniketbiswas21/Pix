@@ -9,7 +9,7 @@ interface theme {
 }
 
 export const lightTheme: theme = {
-  body: "#E2E2E2",
+  body: "#F0F2F5",
   text: "#363537",
   cardBackground: "#FFF",
   secondaryColor: "#986FF7",
